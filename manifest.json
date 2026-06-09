@@ -1,0 +1,23 @@
+{
+  "name": "MİD-DEC Risk Calculator",
+  "short_name": "MİD-DEC",
+  "description": "A medical risk assessment application for healthcare professionals.",
+  "start_url": "./?app=true",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#81B7C3",
+  "background_color": "#FFFFFF",
+  "icons": [
+    {
+      "src": "./assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

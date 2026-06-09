@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
+    <title>MİD-DEC | Omuz Distosisi Risk Öngörü Sistemi</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json" />
+
+    <!-- PWA Service Worker Registration -->
+    <script src="./register-service-worker.js" defer></script>
+
+    <!-- PWA Primary Meta Tags -->
+    <meta name="theme-color" content="#81B7C3" />
+    <meta name="description" content="A medical risk assessment application for healthcare professionals." />
+
+    <!-- Apple PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MİD-DEC" />
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="./assets/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="./assets/apple-touch-icon.png" />
+
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        // Immediately check and set app-mode to prevent FOUC for direct app launches
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('app') === 'true' || window.location.hash === '#app') {
+                document.documentElement.classList.add('app-mode');
+            }
+        })();
+    </script>
+
+    <style>
+        /* Base Reset & Fonts */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background-color: #F8F9FA;
+            color: #1E232C;
+            scroll-behavior: smooth;
+        }
+
+        #root {
+            display: none;
+            height: 100%;
+            overflow: hidden;
+            background-color: #F8F9FA;
+        }
+
+        .app-mode #landing-page {
+            display: none !important;
+        }
+
+        .app-mode #root {
+            display: flex !important;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Safe area support for iOS Notch and Home Indicator */
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Landing Page Layout Styles */
+        #landing-page {
+            display: block;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #F0F5F6 0%, #F8F9FA 400px, #FFFFFF 100%);
+        }
+
+        /* Header Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px border #E8ECF4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #365C67;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(129, 183, 195, 0.2);
+        }
+
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .navbar-link {
+            text-decoration: none;
+            color: #687684;
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .navbar-link:hover {
+            color: #365C67;
+        }
+
+        /* Lang Toggler */
+        .lang-toggle {
+            background: #E8ECF4;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #365C67;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-toggle:hover {
+            background: #81B7C3;
+            color: #FFFFFF;
+        }
+
+        .btn-primary-gradient {
+            background: linear-gradient(135deg, #81B7C3 0%, #365C67 100%);
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(54, 92, 103, 0.25);
+        }
+
+        .btn-primary-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(54, 92, 103, 0.35);
+        }
+
+        .btn-primary-gradient:active {
+            transform: translateY(0);
+        }
+
+        /* Main Sections Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .hero-content {
+            flex: 1.2;
+        }
+
+        .hero-tagline {
+            display: inline-block;
+            background: rgba(129, 183, 195, 0.12);
+            color: #365C67;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 46px;
+            font-weight: 900;
+            color: #1e232c;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero-sub {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #687684;
+            margin-bottom: 35px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-secondary {
+            background: #FFFFFF;
+            color: #365C67;
+            border: 1.5px solid #81B7C3;
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(129, 183, 195, 0.08);
+            border-color: #365C67;
+        }
+
+        .hero-visual {
+            flex: 0.8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-bg-blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(129, 183, 195, 0.3) 0%, rgba(24, 192, 122, 0.05) 100%);
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: 0;
+            animation: pulse-blob 6s infinite alternate;
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            z-index: 1;
+            text-align: center;
+            animation: float-card 4s ease-in-out infinite;
+        }
+
+        @keyframes float-card {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse-blob {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.2); opacity: 0.9; }
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+
+        .feature-card {
+            background: #FFFFFF;
+            border: 1px solid #E8ECF4;
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.04);
+            border-color: #81B7C3;
+        }
+
+        .feature-icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(129, 183, 195, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: #365C67;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1E232C;
+            margin-bottom: 12px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #687684;
+        }
+
+        .calc-mode-selector {
+            display: flex;
+            background: #F8F9FB;
+            border: 1px solid #E8ECF4;
+            border-radius: 16px;
+            padding: 5px;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #687684;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: #FFFFFF;
+            color: #365C67;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Interactive Calculator Area */
+        .calculator-section {
+            background: #FFFFFF;
+            border: 1px solid #E8ECF4;
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .section-title {
+            font-size: 30px;
+            font-weight: 900;
+            color: #1E232C;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-sub {
+            font-size: 15px;
+            color: #687684;
+            line-height: 1.5;
+        }
+
+        /* Calculator Wizard Grid */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+        }
+
+        /* Wizard Tabs Navigation */
+        .wizard-tabs {
+            display: flex;
+            border-bottom: 2px solid #F1F3F5;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .wizard-tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 6px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #687684;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+
+        .wizard-tab-btn.active {
+            color: #365C67;
+        }
+
+        .wizard-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #81B7C3;
+        }
+
+        /* Form Wizard Steps */
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1E232C;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 46px;
+            padding: 0 16px;
+            border: 1.5px solid #E8ECF4;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1E232C;
+            background: #FFFFFF;
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #81B7C3;
+            box-shadow: 0 0 0 4px rgba(129, 183, 195, 0.15);
+        }
+
+        .input-wrapper .unit {
+            position: absolute;
+            right: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #687684;
+            pointer-events: none;
+        }
+
+        .input-group .helper-text {
+            font-size: 11px;
+            color: #687684;
+            font-weight: 500;
+        }
+
+        .input-group.error input {
+            border-color: #EA4335 !important;
+        }
+
+        .input-group.error .error-msg {
+            color: #EA4335;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Radio Toggle Styles */
+        .radio-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .radio-btn {
+            flex: 1;
+            height: 42px;
+            border: 1.5px solid #E8ECF4;
+            border-radius: 10px;
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #687684;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .radio-btn.active {
+            background: rgba(54, 92, 103, 0.1);
+            border-color: #365C67;
+            color: #365C67;
+            font-weight: 700;
+        }
+
+        /* Sticky Footer Navigation for Wizard */
+        .wizard-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #F1F3F5;
+        }
+
+        /* Live Derived Metrics Panel */
+        .derived-panel {
+            background: #F8F9FA;
+            border-radius: 20px;
+            border: 1px dashed #81B7C3;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .derived-panel-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #365C67;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #E8ECF4;
+            padding-bottom: 8px;
+        }
+
+        .derived-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #687684;
+        }
+
+        .derived-item span:last-child {
+            font-weight: 700;
+            color: #1E232C;
+        }
+
+        /* Gauge Visualization Panel */
+        .result-panel {
+            background: #FFFFFF;
+            border: 1px solid #E8ECF4;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 110px;
+            margin-bottom: 20px;
+        }
+
+        .gauge-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: #E8ECF4;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+
+        .gauge-fill-path {
+            fill: none;
+            stroke: #18C07A;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 125.66;
+            stroke-dashoffset: 125.66;
+            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease;
+        }
+
+        .gauge-text-val {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            font-weight: 900;
+            color: #1E232C;
+        }
+
+        .result-category-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            background: rgba(24, 192, 122, 0.12);
+            color: #18C07A;
+            transition: all 0.3s ease;
+        }
+
+        .result-advice {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #687684;
+            max-width: 280px;
+        }
+
+        /* Medical Disclaimer Footer Banner */
+        .disclaimer-card {
+            background: rgba(129, 183, 195, 0.05);
+            border: 1px solid rgba(129, 183, 195, 0.15);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .disclaimer-icon-box {
+            color: #365C67;
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .disclaimer-content {
+            flex: 1;
+        }
+
+        .disclaimer-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #365C67;
+            margin-bottom: 6px;
+        }
+
+        .disclaimer-body {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #687684;
+        }
+
+        /* Footers */
+        .page-footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #E8ECF4;
+            color: #687684;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 991px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar-brand span {
+                display: none;
+            }
+
+            .navbar-menu {
+                gap: 15px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .calculator-section {
+                padding: 24px;
+            }
+        }
+
+        /* Watermark Motif Background */
+        .background-watermark {
+            position: fixed;
+            top: 15%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url('./assets/watermar-branding-motifk.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1. Pure HTML/CSS/JS Landing Page -->
+    <div id="landing-page">
+        <div class="background-watermark"></div>
+        <nav class="navbar">
+            <a href="#" class="navbar-brand">
+                <img src="./assets/logo.png" alt="MİD-DEC" class="navbar-logo" />
+                <span>MİD-DEC</span>
+            </a>
+            <div class="navbar-menu">
+                <a href="#about-anchor" class="navbar-link" data-i18n="navAbout">Hakkında</a>
+                <a href="#calculator-anchor" class="navbar-link" data-i18n="navTool">Risk Hesaplayıcı</a>
+                <button class="lang-toggle" id="lang-btn" onclick="toggleLanguage()">EN</button>
+                <button class="btn-primary-gradient" id="nav-login-btn" onclick="downloadApk()" data-i18n="btnLaunch">Sisteme Giriş Yap</button>
+            </div>
+        </nav>
+
+        <div class="main-container">
+            <!-- Hero section -->
+            <header class="hero">
+                <div class="hero-content">
+                    <div class="hero-tagline" data-i18n="tagline">Omuz Distosisi Risk Öngörü Sistemi</div>
+                    <h1 class="hero-title" data-i18n="heroTitle">Klinik Hassasiyetle Omuz Distosisi Risk Öngörüsü</h1>
+                    <p class="hero-sub" data-i18n="heroSub">Gebelik öncesi, maternal ve fetal ultrasonografik verileri bir araya getiren kanıta dayalı, dinamik risk değerlendirme aracı.</p>
+                    <div class="hero-actions">
+                        <a href="#calculator-anchor" class="btn-primary-gradient" id="hero-try-btn" data-i18n="heroBtnTry">Ücretsiz Hesaplayıcıyı Dene</a>
+                        <button class="btn-secondary" id="hero-login-btn" onclick="downloadApk()" data-i18n="heroBtnLaunch">Klinisyen Girişi</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-bg-blob"></div>
+                    <div class="hero-card">
+                        <img src="./assets/logo.png" alt="MİD-DEC" style="width: 80px; height: 80px; margin-bottom: 15px; border-radius: 50%; box-shadow: 0 8px 24px rgba(129, 183, 195, 0.35); object-fit: contain; background: #FFFFFF; padding: 5px;" />
+                        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #365C67;" data-i18n="heroCardTitle">MİD-DEC Risk Modeli</h3>
+                        <p style="font-size: 13px; color: #687684; line-height: 1.5;" data-i18n="heroCardDesc">Omuz distosisi gelişim riskini klinik parametreler ve ultrason ölçümleriyle anında analiz edin.</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Features -->
+            <section class="features" id="about-anchor">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="m4.93 4.93 4.24 4.24" />
+                            <path d="m14.83 9.17 4.24-4.24" />
+                            <path d="m14.83 14.83 4.24 4.24" />
+                            <path d="m9.17 14.83-4.24 4.24" />
+                            <circle cx="12" cy="12" r="4" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title" data-i18n="feat1Title">Klinik Karar Desteği</h3>
+                    <p class="feature-desc" data-i18n="feat1Desc">Doğum öncesi ultrasonografik biyometri parametrelerini kullanarak risk olasılığını saniyeler içinde hesaplar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
+                            <path d="M6 6h10" />
+                            <path d="M6 10h10" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title" data-i18n="feat2Title">Kanıta Dayalı Formüller</h3>
+                    <p class="feature-desc" data-i18n="feat2Desc">Warsof ve Hadlock fetal ağırlık modelleri ile AC/BPD farklarını temel alan bilimsel altyapı.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title" data-i18n="feat3Title">Doğum Sonrası Değerlendirme</h3>
+                    <p class="feature-desc" data-i18n="feat3Desc">Doğum esnasında gelişen omuz distosisi ciddiyetini ve olası komplikasyon derecesini puanlar.</p>
+                </div>
+            </section>
+
+            <!-- Interactive Calculator Form Card -->
+            <section class="calculator-section" id="calculator-anchor">
+                <div class="section-header">
+                    <h2 class="section-title" data-i18n="calcTitle">MİD-DEC Risk Öngörü Aracı (Demo)</h2>
+                    <p class="section-sub" id="calc-sub" data-i18n="calcSub">Aşağıdaki klinik verileri girerek doğum öncesi risk puanını anında hesaplayabilirsiniz. Girilen veriler hiçbir şekilde kaydedilmemektedir.</p>
+                </div>
+
+                <div class="calc-mode-selector">
+                    <button class="mode-btn active" id="mode-btn-pre" onclick="setCalcMode('pre_birth')" data-i18n="modePreBirth">Doğum Öncesi Risk</button>
+                    <button class="mode-btn" id="mode-btn-post" onclick="setCalcMode('post_birth')" data-i18n="modePostBirth">Doğum Sonrası Risk</button>
+                </div>
+
+                <div class="calculator-grid">
+                    <!-- Wizard Forms Area -->
+                    <div>
+                        <!-- Tabs -->
+                        <div class="wizard-tabs" id="pre-birth-tabs">
+                            <button class="wizard-tab-btn active" id="tab-btn-0" onclick="goToStep(0)" data-i18n="calcTabMaternal">1. Maternal Veriler</button>
+                            <button class="wizard-tab-btn" id="tab-btn-1" onclick="goToStep(1)" data-i18n="calcTabFetal">2. Fetal Biyometri</button>
+                            <button class="wizard-tab-btn" id="tab-btn-2" onclick="goToStep(2)" data-i18n="calcTabInterventions">3. Müdahaleler</button>
+                        </div>
+
+                        <div class="wizard-tabs" id="post-birth-tabs" style="display: none;">
+                            <button class="wizard-tab-btn active" id="post-tab-btn-0" onclick="goToStep(0)" data-i18n="calcTabPostLabor">1. Doğum Süreci</button>
+                            <button class="wizard-tab-btn" id="post-tab-btn-1" onclick="goToStep(1)" data-i18n="calcTabPostNeonatal">2. Yenidoğan Bulguları</button>
+                            <button class="wizard-tab-btn" id="post-tab-btn-2" onclick="goToStep(2)" data-i18n="calcTabPostComplications">3. Komplikasyonlar</button>
+                        </div>
+
+                        <!-- Pre-Birth steps container -->
+                        <div id="pre-birth-steps-container">
+                            <!-- Step 1 Form -->
+                            <div class="wizard-step active" id="step-0">
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="maternalAge" data-i18n="lblAge">Anne Yaşı</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="maternalAge" placeholder="28" min="15" max="50" oninput="validateLive()" />
+                                        </div>
+                                        <div class="error-msg" id="err-maternalAge"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="maternalHeight" data-i18n="lblHeight">Boy (cm)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="maternalHeight" placeholder="165" min="100" max="220" oninput="validateLive()" />
+                                            <span class="unit">cm</span>
+                                        </div>
+                                        <div class="error-msg" id="err-maternalHeight"></div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="maternalWeight" data-i18n="lblWeight">Güncel Ağırlık (kg)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="maternalWeight" placeholder="75" min="40" max="200" oninput="validateLive()" />
+                                            <span class="unit">kg</span>
+                                        </div>
+                                        <div class="error-msg" id="err-maternalWeight"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="prePregnancyWeight" data-i18n="lblPreWeight">Gebelik Öncesi Ağırlık (kg)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="prePregnancyWeight" placeholder="62" min="40" max="200" oninput="validateLive()" />
+                                            <span class="unit">kg</span>
+                                        </div>
+                                        <div class="error-msg" id="err-prePregnancyWeight"></div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label data-i18n="lblPregestDiabetes">Gebelik Öncesi Diyabet</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="pregestDiabetes-No" onclick="setRadio('pregestDiabetes', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="pregestDiabetes-Yes" onclick="setRadio('pregestDiabetes', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label data-i18n="lblGestDiabetes">Gestasyonel Diyabet</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="gestDiabetes-No" onclick="setRadio('gestDiabetes', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="gestDiabetes-Yes" onclick="setRadio('gestDiabetes', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label data-i18n="lblInsulin">İnsülin Kullanımı</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="insulin-No" onclick="setRadio('insulin', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="insulin-Yes" onclick="setRadio('insulin', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label data-i18n="lblHistory">Önceki Gebelikte Omuz Distosisi Öyküsü</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="history-No" onclick="setRadio('history', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="history-Yes" onclick="setRadio('history', 'Yes')">Evet</div>
+                                            <div class="radio-btn" id="history-NA" onclick="setRadio('history', 'N/A')">N/A</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 Form (Fetal) -->
+                            <div class="wizard-step" id="step-1">
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="bpd" data-i18n="lblBpd">BPD (Biparietal Çap)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bpd" placeholder="88" min="50" max="120" oninput="validateLive()" />
+                                            <span class="unit">mm</span>
+                                        </div>
+                                        <span class="helper-text">Aralık: 73–115 mm</span>
+                                        <div class="error-msg" id="err-bpd"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="hc" data-i18n="lblHc">HC (Baş Çevresi)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="hc" placeholder="320" min="200" max="420" oninput="validateLive()" />
+                                            <span class="unit">mm</span>
+                                        </div>
+                                        <span class="helper-text">Aralık: 275–385 mm</span>
+                                        <div class="error-msg" id="err-hc"></div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="ac" data-i18n="lblAc">AC (Karın Çevresi)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="ac" placeholder="310" min="200" max="450" oninput="validateLive()" />
+                                            <span class="unit">mm</span>
+                                        </div>
+                                        <span class="helper-text">Aralık: 260–445 mm</span>
+                                        <div class="error-msg" id="err-ac"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="fl" data-i18n="lblFl">FL (Femur Uzunluğu)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="fl" placeholder="68" min="40" max="100" oninput="validateLive()" />
+                                            <span class="unit">mm</span>
+                                        </div>
+                                        <span class="helper-text">Aralık: 54–88 mm</span>
+                                        <div class="error-msg" id="err-fl"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Live Derived Metrics Info Grid -->
+                                <div class="derived-panel">
+                                    <div class="derived-panel-title">Türetilen Canlı Veriler</div>
+                                    <div class="derived-item">
+                                        <span data-i18n="derivedBmi">Hesaplanan BMI</span>
+                                        <span id="derived-bmi">—</span>
+                                    </div>
+                                    <div class="derived-item">
+                                        <span data-i18n="derivedEfw">Tahmini Bebek Ağırlığı (Warsof)</span>
+                                        <span id="derived-efw">—</span>
+                                    </div>
+                                    <div class="derived-item">
+                                        <span data-i18n="derivedRatio">AC / BPD Oranı</span>
+                                        <span id="derived-ratio">—</span>
+                                    </div>
+                                    <div class="derived-item">
+                                        <span data-i18n="derivedDiff">AC - BPD Farkı</span>
+                                        <span id="derived-diff">—</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 Form (Interventions) -->
+                            <div class="wizard-step" id="step-2">
+                                <div class="input-group">
+                                    <label data-i18n="lblInduction">Doğum İndüksiyonu (Suni Sancı)</label>
+                                    <div class="radio-row">
+                                        <div class="radio-btn" id="induction-No" onclick="setRadio('induction', 'No')">Hayır</div>
+                                        <div class="radio-btn" id="induction-Yes" onclick="setRadio('induction', 'Yes')">Evet</div>
+                                    </div>
+                                </div>
+                                <div class="input-group" style="margin-bottom: 30px;">
+                                    <label data-i18n="lblEpidural">Epidural Analjezi</label>
+                                    <div class="radio-row">
+                                        <div class="radio-btn" id="epidural-No" onclick="setRadio('epidural', 'No')">Hayır</div>
+                                        <div class="radio-btn" id="epidural-Yes" onclick="setRadio('epidural', 'Yes')">Evet</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post-Birth steps container -->
+                        <div id="post-birth-steps-container" style="display: none;">
+                            <!-- Step 1 Form (Labor Process) -->
+                            <div class="wizard-step" id="post-step-0">
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label data-i18n="lblVacuum">Vakum Kullanımı</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="vacuum-No" onclick="setRadio('vacuum', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="vacuum-Yes" onclick="setRadio('vacuum', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label data-i18n="lblCrediManeuver">Kristeller (Credi) Manevrası</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="crediManeuver-No" onclick="setRadio('crediManeuver', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="crediManeuver-Yes" onclick="setRadio('crediManeuver', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 Form (Neonatal Findings) -->
+                            <div class="wizard-step" id="post-step-1">
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="birthWeight" data-i18n="lblBirthWeight">Doğum Ağırlığı (g)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="birthWeight" placeholder="3500" min="500" max="6000" oninput="validateLive()" />
+                                            <span class="unit">g</span>
+                                        </div>
+                                        <div class="error-msg" id="err-birthWeight"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label data-i18n="lblShoulderDystocia">Omuz Distosisi Gelişti mi?</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="shoulderDystocia-No" onclick="setRadio('shoulderDystocia', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="shoulderDystocia-Yes" onclick="setRadio('shoulderDystocia', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="apgar1" data-i18n="lblApgar1">APGAR 1. dk Skoru</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="apgar1" placeholder="8" min="0" max="10" oninput="validateLive()" />
+                                        </div>
+                                        <div class="error-msg" id="err-apgar1"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="apgar5" data-i18n="lblApgar5">APGAR 5. dk Skoru</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="apgar5" placeholder="9" min="0" max="10" oninput="validateLive()" />
+                                        </div>
+                                        <div class="error-msg" id="err-apgar5"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 Form (Complications) -->
+                            <div class="wizard-step" id="post-step-2">
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label data-i18n="lblHie">HIE (Hipoksik İskemik Ensefalopati)</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="hie-No" onclick="setRadio('hie', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="hie-Yes" onclick="setRadio('hie', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label data-i18n="lblClavicleFracture">Klavikula Kırığı</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="clavicleFracture-No" onclick="setRadio('clavicleFracture', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="clavicleFracture-Yes" onclick="setRadio('clavicleFracture', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label data-i18n="lblMoroWeakness">Moro Refleksinde Zayıflık</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="moroWeakness-No" onclick="setRadio('moroWeakness', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="moroWeakness-Yes" onclick="setRadio('moroWeakness', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label data-i18n="lblPph">PPH (Postpartum Hemoraji)</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="pph-No" onclick="setRadio('pph', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="pph-Yes" onclick="setRadio('pph', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label data-i18n="lblPerianalTear">Perianal Yırtık (3./4. derece)</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="perianalTear-No" onclick="setRadio('perianalTear', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="perianalTear-Yes" onclick="setRadio('perianalTear', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sticky Wizard Navigation buttons -->
+                        <div class="wizard-footer">
+                            <button class="btn-secondary" id="prev-btn" onclick="prevStep()" disabled data-i18n="btnPrev">Önceki Adım</button>
+                            <button class="btn-primary-gradient" id="next-btn" onclick="nextStep()" data-i18n="btnNext">Sonraki Adım</button>
+                        </div>
+                    </div>
+
+                    <!-- Gauge and Result Display Panel -->
+                    <div>
+                        <div class="result-panel">
+                            <h3 id="result-title" style="font-size: 16px; font-weight: 800; margin-bottom: 25px; color: #365C67;" data-i18n="resultTitle">Hesaplama Sonucu</h3>
+                            <div class="gauge-container">
+                                <svg viewBox="0 0 100 50" class="gauge-svg">
+                                    <path d="M 10 50 A 40 40 0 0 1 90 50" class="gauge-bg" />
+                                    <path id="gauge-fill" d="M 10 50 A 40 40 0 0 1 90 50" class="gauge-fill-path" />
+                                </svg>
+                                <div class="gauge-text-val" id="gauge-score">0%</div>
+                            </div>
+                            <div class="result-category-badge" id="result-badge" data-i18n="resultCatLow">Düşük Risk</div>
+                            <p class="result-advice" id="result-advice" data-i18n="resultAdviceLow">Klinik takip önerilir. Omuz distosisi riski standart popülasyon düzeyindedir.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Important Medical Disclaimer Banner -->
+            <div class="disclaimer-card">
+                <div class="disclaimer-icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <path d="m9 12 2 2 4-4" />
+                    </svg>
+                </div>
+                <div class="disclaimer-content">
+                    <div class="disclaimer-title" data-i18n="disclaimerTitle">Önemli Tıbbi Uyarı</div>
+                    <p class="disclaimer-body" data-i18n="disclaimerBody">MİD-DEC bir klinik karar destek aracıdır. Elde edilen sonuçlar kesin bir teşhis veya tedavi taahhüdü niteliği taşımaz. Nihai klinik karar ve doğum yöntemi seçimi tamamen hekimin sorumluluğundadır.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="page-footer">
+            <p data-i18n="footerText">© 2026 MİD-DEC. Tüm hakları saklıdır. Sağlık profesyonelleri için geliştirilmiştir.</p>
+        </footer>
+    </div>
+
+    <!-- 2. React Native Web App Mounting Point -->
+    <div id="root"></div>
+
+    <!-- Translations & Form Logic Script -->
+    <script>
+        const TRANSLATIONS = {
+            tr: {
+                title: "MİD-DEC | Omuz Distosisi Risk Öngörü Sistemi",
+                navAbout: "Hakkında",
+                navTool: "Risk Hesaplayıcı",
+                btnLaunch: "Uygulamayı İndir (APK)",
+                tagline: "Omuz Distosisi Risk Öngörü Sistemi",
+                heroTitle: "Klinik Hassasiyetle Omuz Distosisi Risk Öngörüsü",
+                heroSub: "Gebelik öncesi, maternal ve fetal ultrasonografik verileri bir araya getiren kanıta dayalı, dinamik risk değerlendirme aracı.",
+                heroBtnTry: "Ücretsiz Hesaplayıcıyı Dene",
+                heroBtnLaunch: "Android APK İndir",
+                heroCardTitle: "MİD-DEC Risk Modeli",
+                heroCardDesc: "Omuz distosisi gelişim riskini klinik parametreler ve ultrason ölçümleriyle anında analiz edin.",
+                feat1Title: "Klinik Karar Desteği",
+                feat1Desc: "Doğum öncesi ultrasonografik biyometri parametrelerini kullanarak risk olasılığını saniyeler içinde hesaplar.",
+                feat2Title: "Kanıta Dayalı Formüller",
+                feat2Desc: "Warsof ve Hadlock fetal ağırlık modelleri ile AC/BPD farklarını temel alan bilimsel altyapı.",
+                feat3Title: "Doğum Sonrası Değerlendirme",
+                feat3Desc: "Doğum esnasında gelişen omuz distosisi ciddiyetini ve olası komplikasyon derecesini puanlar.",
+                calcTitle: "MİD-DEC Risk Öngörü Aracı (Demo)",
+                calcSub: "Aşağıdaki klinik verileri girerek doğum öncesi risk puanını anında hesaplayabilirsiniz. Girilen veriler hiçbir şekilde kaydedilmemektedir.",
+                calcSubPost: "Doğum sırasında gelişen omuz distosisinin ciddiyetini ve olası komplikasyon derecesini puanlayın. Veriler kaydedilmemektedir.",
+                modePreBirth: "Doğum Öncesi Risk",
+                modePostBirth: "Doğum Sonrası Risk",
+                calcTabMaternal: "1. Maternal Veriler",
+                calcTabFetal: "2. Fetal Biyometri",
+                calcTabInterventions: "3. Müdahaleler",
+                calcTabPostLabor: "1. Doğum Süreci",
+                calcTabPostNeonatal: "2. Yenidoğan Bulguları",
+                calcTabPostComplications: "3. Komplikasyonlar",
+                lblAge: "Anne Yaşı",
+                lblHeight: "Boy (cm)",
+                lblWeight: "Güncel Ağırlık (kg)",
+                lblPreWeight: "Gebelik Öncesi Ağırlık (kg)",
+                lblPregestDiabetes: "Gebelik Öncesi Diyabet",
+                lblGestDiabetes: "Gestasyonel Diyabet",
+                lblInsulin: "İnsülin Kullanımı",
+                lblHistory: "Önceki Gebelikte Omuz Distosisi Öyküsü",
+                lblBpd: "BPD (Biparietal Çap - mm)",
+                lblHc: "HC (Baş Çevresi - mm)",
+                lblAc: "AC (Karın Çevresi - mm)",
+                lblFl: "FL (Femur Uzunluğu - mm)",
+                lblInduction: "Doğum İndüksiyonu (Suni Sancı)",
+                lblEpidural: "Epidural Analjezi",
+                lblVacuum: "Vakum Kullanımı",
+                lblCrediManeuver: "Kristeller (Credi) Manevrası",
+                lblBirthWeight: "Doğum Ağırlığı (g)",
+                lblShoulderDystocia: "Omuz Distosisi Gelişti mi?",
+                lblApgar1: "APGAR 1. dk Skoru",
+                lblApgar5: "APGAR 5. dk Skoru",
+                lblHie: "HIE (Hipoksik İskemik Ensefalopati)",
+                lblClavicleFracture: "Klavikula Kırığı",
+                lblMoroWeakness: "Moro Refleksinde Zayıflık",
+                lblPph: "PPH (Postpartum Hemoraji)",
+                lblPerianalTear: "Perianal Yırtık (3./4. derece)",
+                btnCalculate: "Risk Durumunu Hesapla",
+                btnNext: "Sonraki Adım",
+                btnPrev: "Önceki Adım",
+                valRequired: "Zorunlu alan.",
+                valRange: "Aralık dışında değer.",
+                resultTitle: "Hesaplama Sonucu",
+                resultScore: "Risk Puanı",
+                resultCatLow: "Düşük Risk",
+                resultCatMed: "Orta Risk",
+                resultCatHigh: "Yüksek Risk",
+                resultAdviceLow: "Klinik takip önerilir. Omuz distosisi riski standart popülasyon düzeyindedir.",
+                resultAdviceMed: "Dikkatli olunmalıdır. Doğum ekibi omuz distosisi manevraları konusunda hazırlıklı olmalı, doğum ilerleyişi yakından izlenmelidir.",
+                resultAdviceHigh: "Yüksek Risk Grubu! Vajinal doğum planlaması yeniden gözden geçirilmeli, omuz distosisi acil eylem planı hazır tutulmalıdır.",
+                postResultTitle: "Doğum Sonrası Değerlendirme Sonucu",
+                postResultScore: "Ciddiyet Puanı",
+                postResultCatMild: "Hafif / Normal",
+                postResultCatModerate: "Orta Derece Ciddiyet",
+                postResultCatSevere: "Ciddi Omuz Distosisi ve Komplikasyon",
+                postResultAdviceMild: "Hafif veya komplikasyonsuz omuz distosisi süreci. Standart yenidoğan ve postpartum bakım önerilir.",
+                postResultAdviceModerate: "Orta derecede omuz distosisi ve olası komplikasyonlar. Yenidoğanın fiziksel muayenesi (özellikle klavikula ve moro refleksi) ve maternal postpartum hemoraji yönünden takip önerilir.",
+                postResultAdviceSevere: "Ciddi komplikasyon veya asfiksi riski! Yenidoğanın HIE yönünden yenidoğan yoğun bakım ünitesinde izlenmesi ve maternal postpartum yakın takip önerilir.",
+                derivedBmi: "Hesaplanan BMI",
+                derivedEfw: "Tahmini Bebek Ağırlığı (Warsof)",
+                derivedRatio: "AC / BPD Oranı",
+                derivedDiff: "AC - BPD Farkı",
+                disclaimerTitle: "Önemli Tıbbi Uyarı",
+                disclaimerBody: "MİD-DEC bir klinik karar destek aracıdır. Elde edilen sonuçlar kesin bir teşhis veya tedavi taahhüdü niteliği taşımaz. Nihai klinik karar ve doğum yöntemi seçimi tamamen hekimin sorumluluğundadır.",
+                footerText: "© 2026 MİD-DEC. Tüm hakları saklıdır. Sağlık profesyonelleri için geliştirilmiştir."
+            },
+            en: {
+                title: "MİD-DEC | Shoulder Dystocia Risk Prediction System",
+                navAbout: "About",
+                navTool: "Risk Calculator",
+                btnLaunch: "Download App (APK)",
+                tagline: "Shoulder Dystocia Risk Prediction",
+                heroTitle: "Predict Shoulder Dystocia with Clinical Precision",
+                heroSub: "Evidence-based, dynamic risk assessment combining pre-pregnancy, maternal, and fetal ultrasonographic data.",
+                heroBtnTry: "Try Free Calculator",
+                heroBtnLaunch: "Download Android APK",
+                heroCardTitle: "MİD-DEC Risk Model",
+                heroCardDesc: "Instantly analyze the risk of shoulder dystocia using clinical parameters and ultrasound measurements.",
+                feat1Title: "Clinical Support",
+                feat1Desc: "Computes risk probability in seconds using pre-birth ultrasonographic biometry parameters.",
+                feat2Title: "Evidence-Based Formulas",
+                feat2Desc: "Scientific framework based on Warsof and Hadlock fetal weight models and AC/BPD differences.",
+                feat3Title: "Post-Birth Severity Rating",
+                feat3Desc: "Scores the severity of shoulder dystocia during delivery and associated complications.",
+                calcTitle: "MİD-DEC Risk Calculator (Demo)",
+                calcSub: "Enter the clinical parameters below to compute the pre-birth risk score instantly. Entered data is processed locally and never saved.",
+                calcSubPost: "Score the severity of shoulder dystocia during delivery and associated complications. Data is processed locally.",
+                modePreBirth: "Pre-Birth Risk",
+                modePostBirth: "Post-Birth Severity",
+                calcTabMaternal: "1. Maternal Data",
+                calcTabFetal: "2. Fetal Biometry",
+                calcTabInterventions: "3. Interventions",
+                calcTabPostLabor: "1. Labor Process",
+                calcTabPostNeonatal: "2. Neonatal Findings",
+                calcTabPostComplications: "3. Complications",
+                lblAge: "Maternal Age",
+                lblHeight: "Height (cm)",
+                lblWeight: "Current Weight (kg)",
+                lblPreWeight: "Pre-Pregnancy Weight (kg)",
+                lblPregestDiabetes: "Pregestational Diabetes",
+                lblGestDiabetes: "Gestational Diabetes",
+                lblInsulin: "Insulin Use",
+                lblHistory: "History of Shoulder Dystocia in Previous Pregnancy",
+                lblBpd: "BPD (Biparietal Diameter - mm)",
+                lblHc: "HC (Head Circumference - mm)",
+                lblAc: "AC (Abdominal Circumference - mm)",
+                lblFl: "FL (Femur Length - mm)",
+                lblInduction: "Labor Induction",
+                lblEpidural: "Epidural Analgesia",
+                lblVacuum: "Vacuum Extraction",
+                lblCrediManeuver: "Kristeller (Credi) Maneuver",
+                lblBirthWeight: "Birth Weight (g)",
+                lblShoulderDystocia: "Did Shoulder Dystocia Occur?",
+                lblApgar1: "APGAR 1st Minute Score",
+                lblApgar5: "APGAR 5th Minute Score",
+                lblHie: "HIE (Hypoxic-Ischemic Encephalopathy)",
+                lblClavicleFracture: "Clavicle Fracture",
+                lblMoroWeakness: "Moro Reflex Weakness",
+                lblPph: "PPH (Postpartum Hemorrhage)",
+                lblPerianalTear: "Perianal Tear (3rd/4th degree)",
+                btnCalculate: "Calculate Risk Status",
+                btnNext: "Next Step",
+                btnPrev: "Previous Step",
+                valRequired: "Required field.",
+                valRange: "Value out of range.",
+                resultTitle: "Assessment Result",
+                resultScore: "Risk Score",
+                resultCatLow: "Low Risk",
+                resultCatMed: "Medium Risk",
+                resultCatHigh: "High Risk",
+                resultAdviceLow: "Clinical follow-up recommended. Shoulder dystocia risk is at standard population levels.",
+                resultAdviceMed: "Caution advised. The delivery team should be prepared for shoulder dystocia maneuvers; labor progress should be closely monitored.",
+                resultAdviceHigh: "High Risk Group! Mode of delivery should be re-evaluated; shoulder dystocia emergency plan must be ready.",
+                postResultTitle: "Post-Birth Assessment Result",
+                postResultScore: "Severity Score",
+                postResultCatMild: "Mild / Normal",
+                postResultCatModerate: "Moderate Severity",
+                postResultCatSevere: "Severe Shoulder Dystocia & Complications",
+                postResultAdviceMild: "Mild or uncomplicated delivery outcome. Standard neonatal and postpartum care recommended.",
+                postResultAdviceModerate: "Moderate shoulder dystocia or neonatal findings. Close physical examination (especially clavicle and Moro reflex) and maternal follow-up for PPH recommended.",
+                postResultAdviceSevere: "Severe complication or asphyxia risk! Neonatal intensive care unit observation for HIE and close maternal monitoring recommended.",
+                derivedBmi: "Calculated BMI",
+                derivedEfw: "Estimated Fetal Weight (Warsof)",
+                derivedRatio: "AC / BPD Ratio",
+                derivedDiff: "AC - BPD Difference",
+                disclaimerTitle: "Important Medical Disclaimer",
+                disclaimerBody: "MİD-DEC is a clinical decision support tool. The results obtained do not constitute a definitive diagnosis or treatment commitment. The final clinical decision and choice of delivery method are entirely the responsibility of the physician.",
+                footerText: "© 2026 MİD-DEC. All rights reserved. Developed for healthcare professionals."
+            }
+        };
+
+        let currentLang = 'tr';
+        let currentStep = 0;
+        let calcMode = 'pre_birth';
+        let lastPreBirthScore = 0;
+
+        // Default calculator state matching react native app
+        const formData = {
+            maternalAge: '',
+            maternalHeight: '',
+            maternalWeight: '',
+            prePregnancyWeight: '',
+            pregestDiabetes: 'No',
+            gestDiabetes: 'No',
+            insulin: 'No',
+            history: 'No',
+            bpd: '',
+            hc: '',
+            ac: '',
+            fl: '',
+            induction: 'No',
+            epidural: 'No',
+            birthWeight: '',
+            apgar1: '',
+            apgar5: '',
+            vacuum: 'No',
+            crediManeuver: 'No',
+            shoulderDystocia: 'No',
+            hie: 'No',
+            clavicleFracture: 'No',
+            moroWeakness: 'No',
+            pph: 'No',
+            perianalTear: 'No'
+        };
+
+        const RANGES = {
+            maternalAge: { min: 15, max: 50 },
+            maternalHeight: { min: 100, max: 220 },
+            maternalWeight: { min: 40, max: 200 },
+            prePregnancyWeight: { min: 40, max: 200 },
+            bpd: { min: 73, max: 115 },
+            hc: { min: 275, max: 385 },
+            ac: { min: 260, max: 445 },
+            fl: { min: 54, max: 88 },
+            birthWeight: { min: 500, max: 6000 },
+            apgar1: { min: 0, max: 10 },
+            apgar5: { min: 0, max: 10 }
+        };
+
+        function setCalcMode(mode) {
+            if (calcMode === mode) return;
+
+            // Toggle active classes on mode selector buttons
+            document.getElementById('mode-btn-pre').classList.toggle('active', mode === 'pre_birth');
+            document.getElementById('mode-btn-post').classList.toggle('active', mode === 'post_birth');
+
+            // Toggle step containers
+            document.getElementById('pre-birth-steps-container').style.display = (mode === 'pre_birth') ? 'block' : 'none';
+            document.getElementById('post-birth-steps-container').style.display = (mode === 'post_birth') ? 'block' : 'none';
+
+            // Toggle tabs header area
+            document.getElementById('pre-birth-tabs').style.display = (mode === 'pre_birth') ? 'flex' : 'none';
+            document.getElementById('post-birth-tabs').style.display = (mode === 'post_birth') ? 'flex' : 'none';
+
+            calcMode = mode;
+            
+            // Reset wizard to step 0
+            goToStep(0);
+
+            // Reset gauge and score display
+            resetResultDisplay();
+        }
+
+        function resetResultDisplay() {
+            const gaugeFill = document.getElementById('gauge-fill');
+            gaugeFill.style.strokeDashoffset = 125.66;
+            gaugeFill.style.stroke = '#81B7C3';
+            document.getElementById('gauge-score').innerText = '0%';
+            
+            const badge = document.getElementById('result-badge');
+            badge.innerText = '—';
+            badge.style.background = 'transparent';
+            badge.style.color = '#687684';
+
+            const advice = document.getElementById('result-advice');
+            advice.innerText = (currentLang === 'tr') ? 'Lütfen hesaplama yapmak için form verilerini doldurun.' : 'Please fill in the form data to calculate risk.';
+            advice.removeAttribute('data-i18n');
+
+            const resTitle = document.getElementById('result-title');
+            if (resTitle) {
+                resTitle.innerText = TRANSLATIONS[currentLang][calcMode === 'pre_birth' ? 'resultTitle' : 'postResultTitle'];
+                resTitle.setAttribute('data-i18n', calcMode === 'pre_birth' ? 'resultTitle' : 'postResultTitle');
+            }
+        }
+
+        // Form navigation logic
+        function goToStep(stepIndex) {
+            if (stepIndex < 0 || stepIndex > 2) return;
+            
+            // Validate current step before moving forward
+            if (stepIndex > currentStep) {
+                if (!validateStep(currentStep)) return;
+            }
+
+            // Hide old step and remove active tab styling
+            const prefix = (calcMode === 'pre_birth') ? '' : 'post-';
+            
+            // Remove active classes
+            const oldStepEl = document.getElementById(`${prefix}step-${currentStep}`);
+            if (oldStepEl) oldStepEl.classList.remove('active');
+            const oldTabEl = document.getElementById(`${prefix}tab-btn-${currentStep}`);
+            if (oldTabEl) oldTabEl.classList.remove('active');
+            
+            currentStep = stepIndex;
+            
+            // Add active classes
+            const newStepEl = document.getElementById(`${prefix}step-${currentStep}`);
+            if (newStepEl) newStepEl.classList.add('active');
+            const newTabEl = document.getElementById(`${prefix}tab-btn-${currentStep}`);
+            if (newTabEl) newTabEl.classList.add('active');
+
+            // Update footer buttons state
+            document.getElementById('prev-btn').disabled = (currentStep === 0);
+            
+            const nextBtn = document.getElementById('next-btn');
+            if (currentStep === 2) {
+                nextBtn.innerText = TRANSLATIONS[currentLang].btnCalculate;
+                nextBtn.setAttribute('data-i18n', 'btnCalculate');
+            } else {
+                nextBtn.innerText = TRANSLATIONS[currentLang].btnNext;
+                nextBtn.setAttribute('data-i18n', 'btnNext');
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < 2) {
+                goToStep(currentStep + 1);
+            } else {
+                if (validateStep(currentStep)) {
+                    calculateRisk();
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                goToStep(currentStep - 1);
+            }
+        }
+
+        // Radio Buttons state management
+        function setRadio(key, val) {
+            formData[key] = val;
+            
+            // Remove active classes from sibling buttons
+            const buttons = document.querySelectorAll(`[id^="${key}-"]`);
+            buttons.forEach(b => b.classList.remove('active'));
+
+            const selectedBtn = document.getElementById(`${key}-${val.replace('/', 'NA')}`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('active');
+            }
+            
+            validateLive();
+        }
+
+        // Live derived metrics updates
+        const mmToCm = (mm) => (parseFloat(mm) || 0) / 10;
+
+        function updateLiveDerivedMetrics() {
+            // Read inputs
+            formData.maternalAge = document.getElementById('maternalAge').value;
+            formData.maternalHeight = document.getElementById('maternalHeight').value;
+            formData.maternalWeight = document.getElementById('maternalWeight').value;
+            formData.prePregnancyWeight = document.getElementById('prePregnancyWeight').value;
+            formData.bpd = document.getElementById('bpd').value;
+            formData.hc = document.getElementById('hc').value;
+            formData.ac = document.getElementById('ac').value;
+            formData.fl = document.getElementById('fl').value;
+
+            // Read post-birth inputs if available
+            if (document.getElementById('birthWeight')) {
+                formData.birthWeight = document.getElementById('birthWeight').value;
+            }
+            if (document.getElementById('apgar1')) {
+                formData.apgar1 = document.getElementById('apgar1').value;
+            }
+            if (document.getElementById('apgar5')) {
+                formData.apgar5 = document.getElementById('apgar5').value;
+            }
+
+            // 1. BMI
+            const w = parseFloat(formData.maternalWeight);
+            const h = parseFloat(formData.maternalHeight) / 100;
+            const bmiEl = document.getElementById('derived-bmi');
+            if (w && h) {
+                const bmi = (w / (h * h)).toFixed(1);
+                bmiEl.innerText = `${bmi} kg/m²`;
+            } else {
+                bmiEl.innerText = '—';
+            }
+
+            // 2. Warsof EFW
+            const bpd = mmToCm(formData.bpd);
+            const ac = mmToCm(formData.ac);
+            const efwEl = document.getElementById('derived-efw');
+            let efw = null;
+            if (bpd && ac) {
+                const kg = Math.pow(10, -1.599 + 0.144 * bpd + 0.032 * ac - 0.000111 * bpd * bpd * ac);
+                efw = Math.round(kg * 1000);
+                efwEl.innerText = `${efw} g`;
+            } else {
+                efwEl.innerText = '—';
+            }
+
+            // 3. AC/BPD Ratio
+            const acVal = parseFloat(formData.ac);
+            const bpdVal = parseFloat(formData.bpd);
+            const ratioEl = document.getElementById('derived-ratio');
+            if (acVal && bpdVal) {
+                ratioEl.innerText = (acVal / bpdVal).toFixed(3);
+            } else {
+                ratioEl.innerText = '—';
+            }
+
+            // 4. AC - BPD Diff
+            const diffEl = document.getElementById('derived-diff');
+            if (ac && bpd) {
+                diffEl.innerText = `${(ac - bpd).toFixed(1)} cm`;
+            } else {
+                diffEl.innerText = '—';
+            }
+        }
+
+        // Live validation for ranges and presence
+        function validateLive() {
+            updateLiveDerivedMetrics();
+        }
+
+        function validateStep(stepIndex) {
+            let isValid = true;
+            
+            // Clear prior errors
+            const inputs = document.querySelectorAll('.input-group');
+            inputs.forEach(i => i.classList.remove('error'));
+            const errorMsgs = document.querySelectorAll('.error-msg');
+            errorMsgs.forEach(m => m.innerText = '');
+
+            if (calcMode === 'pre_birth') {
+                if (stepIndex === 0) {
+                    const required = ['maternalAge', 'maternalHeight', 'maternalWeight', 'prePregnancyWeight'];
+                    required.forEach(field => {
+                        const el = document.getElementById(field);
+                        const val = parseFloat(el.value);
+                        const group = el.closest('.input-group');
+                        const err = document.getElementById(`err-${field}`);
+                        
+                        if (!el.value.trim()) {
+                            group.classList.add('error');
+                            err.innerText = TRANSLATIONS[currentLang].valRequired;
+                            isValid = false;
+                        } else {
+                            const spec = RANGES[field];
+                            if (val < spec.min || val > spec.max) {
+                                group.classList.add('error');
+                                err.innerText = `${TRANSLATIONS[currentLang].valRange} (${spec.min}-${spec.max})`;
+                                isValid = false;
+                            }
+                        }
+                    });
+                } else if (stepIndex === 1) {
+                    const required = ['bpd', 'hc', 'ac', 'fl'];
+                    required.forEach(field => {
+                        const el = document.getElementById(field);
+                        const val = parseFloat(el.value);
+                        const group = el.closest('.input-group');
+                        const err = document.getElementById(`err-${field}`);
+                        
+                        if (!el.value.trim()) {
+                            group.classList.add('error');
+                            err.innerText = TRANSLATIONS[currentLang].valRequired;
+                            isValid = false;
+                        } else {
+                            const spec = RANGES[field];
+                            if (val < spec.min || val > spec.max) {
+                                group.classList.add('error');
+                                err.innerText = `${TRANSLATIONS[currentLang].valRange} (${spec.min}-${spec.max})`;
+                                isValid = false;
+                            }
+                        }
+                    });
+                }
+            } else { // post_birth
+                if (stepIndex === 1) {
+                    const required = ['birthWeight', 'apgar1', 'apgar5'];
+                    required.forEach(field => {
+                        const el = document.getElementById(field);
+                        const val = parseFloat(el.value);
+                        const group = el.closest('.input-group');
+                        const err = document.getElementById(`err-${field}`);
+                        
+                        if (!el.value.trim()) {
+                            group.classList.add('error');
+                            err.innerText = TRANSLATIONS[currentLang].valRequired;
+                            isValid = false;
+                        } else {
+                            const spec = RANGES[field];
+                            if (val < spec.min || val > spec.max) {
+                                group.classList.add('error');
+                                err.innerText = `${TRANSLATIONS[currentLang].valRange} (${spec.min}-${spec.max})`;
+                                isValid = false;
+                            }
+                        }
+                    });
+                }
+            }
+            return isValid;
+        }
+
+        // Score estimation logic
+        function calculateRisk() {
+            if (calcMode === 'pre_birth') {
+                let score = 10;
+                
+                const age = parseInt(formData.maternalAge) || 0;
+                if (age > 35) score += 5;
+                
+                if (formData.pregestDiabetes === 'Yes') score += 15;
+                if (formData.gestDiabetes === 'Yes') score += 10;
+                if (formData.insulin === 'Yes') score += 15;
+                if (formData.history === 'Yes') score += 30;
+                
+                const bpd = mmToCm(formData.bpd);
+                const ac = mmToCm(formData.ac);
+                if (bpd && ac) {
+                    const kg = Math.pow(10, -1.599 + 0.144 * bpd + 0.032 * ac - 0.000111 * bpd * bpd * ac);
+                    const efw = Math.round(kg * 1000);
+                    if (efw > 4000) {
+                        score += 25;
+                        if (efw > 4500) score += 10;
+                    }
+                }
+                
+                const w = parseFloat(formData.maternalWeight);
+                const h = parseFloat(formData.maternalHeight) / 100;
+                if (w && h) {
+                    const bmi = w / (h * h);
+                    if (bmi > 30) {
+                        score += 10;
+                        if (bmi > 35) score += 5;
+                    }
+                }
+                
+                if (formData.induction === 'Yes') score += 5;
+                if (formData.epidural === 'Yes') score += 5;
+                
+                const acVal = parseFloat(formData.ac);
+                const bpdVal = parseFloat(formData.bpd);
+                if (acVal && bpdVal) {
+                    const ratio = acVal / bpdVal;
+                    if (ratio > 1.3) score += 10;
+                }
+                
+                if (ac && bpd) {
+                    const diff = ac - bpd;
+                    if (diff > 2.5) score += 10;
+                }
+                
+                // Limit scores
+                score = Math.max(5, Math.min(99, score));
+                lastPreBirthScore = score;
+                
+                // Settle ranges
+                let category = 'Low';
+                let color = '#18C07A';
+                let catKey = 'resultCatLow';
+                let advKey = 'resultAdviceLow';
+                
+                if (score >= 31 && score <= 70) {
+                    category = 'Medium';
+                    color = '#FFC107';
+                    catKey = 'resultCatMed';
+                    advKey = 'resultAdviceMed';
+                } else if (score > 70) {
+                    category = 'High';
+                    color = '#EA4335';
+                    catKey = 'resultCatHigh';
+                    advKey = 'resultAdviceHigh';
+                }
+
+                updateResultUI(score, color, catKey, advKey);
+            } else {
+                // Post-Birth ciddiyet skoru
+                let score = 0;
+
+                if (formData.shoulderDystocia === 'Yes') score += 30;
+                if (formData.vacuum === 'Yes') score += 10;
+                if (formData.crediManeuver === 'Yes') score += 10;
+
+                const apgar1 = parseInt(formData.apgar1) || 0;
+                if (apgar1 < 7) {
+                    score += 10;
+                    if (apgar1 < 4) score += 5;
+                }
+
+                const apgar5 = parseInt(formData.apgar5) || 0;
+                if (apgar5 < 7) {
+                    score += 15;
+                    if (apgar5 < 4) score += 5;
+                }
+
+                if (formData.hie === 'Yes') score += 20;
+                if (formData.clavicleFracture === 'Yes') score += 15;
+                if (formData.moroWeakness === 'Yes') score += 15;
+                if (formData.pph === 'Yes') score += 20;
+                if (formData.perianalTear === 'Yes') score += 15;
+
+                // Linked pre-birth score > 70
+                if (lastPreBirthScore > 70) {
+                    score += 10;
+                }
+
+                // Diabetes history (pregest, gest or insulin)
+                if (formData.pregestDiabetes === 'Yes' || formData.gestDiabetes === 'Yes' || formData.insulin === 'Yes') {
+                    score += 5;
+                }
+
+                // Fetal weight effect: actual birth weight > 4000
+                const birthWeight = parseFloat(formData.birthWeight) || 0;
+                if (birthWeight > 4000) {
+                    score += 10;
+                }
+
+                // Limit scores
+                score = Math.max(0, Math.min(100, score));
+
+                // Settle ranges
+                let category = 'Low';
+                let color = '#18C07A';
+                let catKey = 'postResultCatMild';
+                let advKey = 'postResultAdviceMild';
+
+                if (score >= 21 && score <= 50) {
+                    category = 'Medium';
+                    color = '#FFC107';
+                    catKey = 'postResultCatModerate';
+                    advKey = 'postResultAdviceModerate';
+                } else if (score > 50) {
+                    category = 'High';
+                    color = '#EA4335';
+                    catKey = 'postResultCatSevere';
+                    advKey = 'postResultAdviceSevere';
+                }
+
+                updateResultUI(score, color, catKey, advKey);
+            }
+        }
+
+        function updateResultUI(score, color, catKey, advKey) {
+            // Visualise gauge
+            const gaugeFill = document.getElementById('gauge-fill');
+            const dashOffset = 125.66 - (125.66 * score / 100);
+            gaugeFill.style.strokeDashoffset = dashOffset;
+            gaugeFill.style.stroke = color;
+            
+            document.getElementById('gauge-score').innerText = `${score}%`;
+            
+            const badge = document.getElementById('result-badge');
+            badge.innerText = TRANSLATIONS[currentLang][catKey];
+            badge.setAttribute('data-i18n', catKey);
+            badge.style.background = color + '20'; // Opacity background
+            badge.style.color = color;
+
+            const advice = document.getElementById('result-advice');
+            advice.innerText = TRANSLATIONS[currentLang][advKey];
+            advice.setAttribute('data-i18n', advKey);
+        }
+
+        // Language toggle framework
+        function toggleLanguage() {
+            currentLang = (currentLang === 'tr') ? 'en' : 'tr';
+            document.getElementById('lang-btn').innerText = (currentLang === 'tr') ? 'EN' : 'TR';
+            updateDOMTexts();
+            
+            // Re-apply current step button naming
+            const nextBtn = document.getElementById('next-btn');
+            if (currentStep === 2) {
+                nextBtn.innerText = TRANSLATIONS[currentLang].btnCalculate;
+            } else {
+                nextBtn.innerText = TRANSLATIONS[currentLang].btnNext;
+            }
+            document.getElementById('prev-btn').innerText = TRANSLATIONS[currentLang].btnPrev;
+            
+            // Re-validate radio button texts representation
+            const radios = [
+                'pregestDiabetes', 'gestDiabetes', 'insulin', 'history', 'induction', 'epidural',
+                'vacuum', 'crediManeuver', 'shoulderDystocia', 'hie', 'clavicleFracture', 'moroWeakness', 'pph', 'perianalTear'
+            ];
+            radios.forEach(key => {
+                const val = formData[key];
+                
+                // Set text content based on selected locale
+                const noEl = document.getElementById(`${key}-No`);
+                if (noEl) noEl.innerText = (currentLang === 'tr') ? 'Hayır' : 'No';
+                const yesEl = document.getElementById(`${key}-Yes`);
+                if (yesEl) yesEl.innerText = (currentLang === 'tr') ? 'Evet' : 'Yes';
+                const naEl = document.getElementById(`${key}-NA`);
+                if (naEl) naEl.innerText = 'N/A';
+            });
+
+            // Re-trigger calculation if has results
+            const scoreText = document.getElementById('gauge-score').innerText;
+            if (scoreText !== '0%') {
+                calculateRisk();
+            }
+        }
+
+        function updateDOMTexts() {
+            // Update document title and description meta tag
+            document.title = TRANSLATIONS[currentLang].title;
+            
+            const i18nElements = document.querySelectorAll('[data-i18n]');
+            i18nElements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (TRANSLATIONS[currentLang][key]) {
+                    el.innerText = TRANSLATIONS[currentLang][key];
+                }
+            });
+        }
+
+        // Launch app router (Sets search parameters to load Expo App)
+        function launchApp() {
+            window.location.search = '?app=true';
+        }
+
+        // Initial setup
+        window.addEventListener('DOMContentLoaded', () => {
+            // Set default radio active state
+            const defaults = {
+                pregestDiabetes: 'No',
+                gestDiabetes: 'No',
+                insulin: 'No',
+                history: 'No',
+                induction: 'No',
+                epidural: 'No',
+                vacuum: 'No',
+                crediManeuver: 'No',
+                shoulderDystocia: 'No',
+                hie: 'No',
+                clavicleFracture: 'No',
+                moroWeakness: 'No',
+                pph: 'No',
+                perianalTear: 'No'
+            };
+            Object.keys(defaults).forEach(key => {
+                setRadio(key, defaults[key]);
+            });
+
+            // Sync HTML language attribute
+            document.documentElement.lang = currentLang;
+            updateDOMTexts();
+        });
+    </script>
+<script src="./_expo/static/js/web/AppEntry-661db6c0314c1fb3446a20bfb45d45d4.js" defer></script>
+</body>
+
+</html>
