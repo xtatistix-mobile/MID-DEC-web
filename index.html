@@ -1272,6 +1272,52 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="parity" data-i18n="lblParity">Parite (Doğum Sayısı)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="parity" placeholder="1" min="0" max="15" oninput="validateLive()" />
+                                        </div>
+                                        <div class="error-msg" id="err-parity"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label data-i18n="lblSmoking">Sigara Kullanımı</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="smoking-No" onclick="setRadio('smoking', 'No')">Hayır</div>
+                                            <div class="radio-btn" id="smoking-Yes" onclick="setRadio('smoking', 'Yes')">Evet</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label for="gestWeeks" data-i18n="lblGestWeeks">Gebelik Haftası (Hafta)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="gestWeeks" placeholder="38" min="34" max="43" oninput="validateLive()" />
+                                            <span class="unit" data-i18n="unitWeeks">hafta</span>
+                                        </div>
+                                        <div class="error-msg" id="err-gestWeeks"></div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="gestDays" data-i18n="lblGestDays">Gebelik Haftası (Gün)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="gestDays" placeholder="3" min="0" max="6" oninput="validateLive()" />
+                                            <span class="unit" data-i18n="unitDays">gün</span>
+                                        </div>
+                                        <div class="error-msg" id="err-gestDays"></div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="input-group">
+                                        <label data-i18n="lblFetalSex">Bebeğin Cinsiyeti</label>
+                                        <div class="radio-row">
+                                            <div class="radio-btn" id="fetalSex-Female" onclick="setRadio('fetalSex', 'Female')">Kız</div>
+                                            <div class="radio-btn" id="fetalSex-Male" onclick="setRadio('fetalSex', 'Male')">Erkek</div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <!-- Spacer -->
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Step 2 Form (Fetal) -->
@@ -1565,6 +1611,13 @@
                 lblGestDiabetes: "Gestasyonel Diyabet",
                 lblInsulin: "İnsülin Kullanımı",
                 lblHistory: "Önceki Gebelikte Omuz Distosisi Öyküsü",
+                lblParity: "Parite (Doğum Sayısı)",
+                lblSmoking: "Sigara Kullanımı",
+                lblFetalSex: "Bebeğin Cinsiyeti",
+                lblGestWeeks: "Gebelik Haftası (Hafta)",
+                lblGestDays: "Gebelik Haftası (Gün)",
+                unitWeeks: "hafta",
+                unitDays: "gün",
                 lblBpd: "BPD (Biparietal Çap - mm)",
                 lblHc: "HC (Baş Çevresi - mm)",
                 lblAc: "AC (Karın Çevresi - mm)",
@@ -1662,6 +1715,13 @@
                 lblGestDiabetes: "Gestational Diabetes",
                 lblInsulin: "Insulin Use",
                 lblHistory: "History of Shoulder Dystocia in Previous Pregnancy",
+                lblParity: "Parity",
+                lblSmoking: "Smoking Status",
+                lblFetalSex: "Fetal Sex",
+                lblGestWeeks: "Gestational Age (Weeks)",
+                lblGestDays: "Gestational Age (Days)",
+                unitWeeks: "weeks",
+                unitDays: "days",
                 lblBpd: "BPD (Biparietal Diameter - mm)",
                 lblHc: "HC (Head Circumference - mm)",
                 lblAc: "AC (Abdominal Circumference - mm)",
@@ -1749,6 +1809,9 @@
             maternalHeight: { min: 100, max: 220 },
             maternalWeight: { min: 40, max: 200 },
             prePregnancyWeight: { min: 40, max: 200 },
+            parity: { min: 0, max: 15 },
+            gestWeeks: { min: 34, max: 43 },
+            gestDays: { min: 0, max: 6 },
             bpd: { min: 73, max: 115 },
             hc: { min: 275, max: 385 },
             ac: { min: 260, max: 445 },
@@ -1884,6 +1947,9 @@
             formData.maternalHeight = document.getElementById('maternalHeight').value;
             formData.maternalWeight = document.getElementById('maternalWeight').value;
             formData.prePregnancyWeight = document.getElementById('prePregnancyWeight').value;
+            formData.parity = document.getElementById('parity').value;
+            formData.gestWeeks = document.getElementById('gestWeeks').value;
+            formData.gestDays = document.getElementById('gestDays').value;
             formData.bpd = document.getElementById('bpd').value;
             formData.hc = document.getElementById('hc').value;
             formData.ac = document.getElementById('ac').value;
@@ -1959,7 +2025,7 @@
 
             if (calcMode === 'pre_birth') {
                 if (stepIndex === 0) {
-                    const required = ['maternalAge', 'maternalHeight', 'maternalWeight', 'prePregnancyWeight'];
+                    const required = ['maternalAge', 'maternalHeight', 'maternalWeight', 'prePregnancyWeight', 'parity', 'gestWeeks', 'gestDays'];
                     required.forEach(field => {
                         const el = document.getElementById(field);
                         const val = parseFloat(el.value);
@@ -2031,68 +2097,92 @@
         // Score estimation logic
         function calculateRisk() {
             if (calcMode === 'pre_birth') {
-                let score = 10;
-                
                 const age = parseInt(formData.maternalAge) || 0;
-                if (age > 35) score += 5;
+                const height = parseFloat(formData.maternalHeight) || 0;
+                const weight = parseFloat(formData.maternalWeight) || 0;
+                const prePregWeight = parseFloat(formData.prePregnancyWeight) || 0;
                 
-                if (formData.pregestDiabetes === 'Yes') score += 15;
-                if (formData.gestDiabetes === 'Yes') score += 10;
-                if (formData.insulin === 'Yes') score += 15;
-                if (formData.history === 'Yes') score += 30;
+                // Gestational Days
+                const gestWeeks = parseInt(formData.gestWeeks) || 0;
+                const gestDays = parseInt(formData.gestDays) || 0;
+                const totalGestDays = gestWeeks * 7 + gestDays;
                 
-                const bpd = mmToCm(formData.bpd);
-                const ac = mmToCm(formData.ac);
-                if (bpd && ac) {
-                    const kg = Math.pow(10, -1.599 + 0.144 * bpd + 0.032 * ac - 0.000111 * bpd * bpd * ac);
-                    const efw = Math.round(kg * 1000);
-                    if (efw > 4000) {
-                        score += 25;
-                        if (efw > 4500) score += 10;
-                    }
+                // Weight gain
+                const weightGain = weight - prePregWeight;
+                
+                // BMI
+                const hMeter = height / 100;
+                const bmi = (hMeter > 0) ? (prePregWeight / (hMeter * hMeter)) : 0;
+                
+                // Parity
+                const parity = parseInt(formData.parity) || 0;
+                
+                // AC-BPD in cm, AC/BPD Ratio
+                const acMm = parseFloat(formData.ac) || 0;
+                const bpdMm = parseFloat(formData.bpd) || 0;
+                const acBpdDiff = (acMm > 0 && bpdMm > 0) ? ((acMm - bpdMm) / 10) : 0;
+                const acBpdR = (bpdMm > 0) ? (acMm / bpdMm) : 0;
+                
+                // TFA-Warsof in kg
+                let efwKg = 0;
+                const bpdCm = bpdMm / 10;
+                const acCm = acMm / 10;
+                if (bpdCm > 0 && acCm > 0) {
+                    const kg = Math.pow(10, -1.599 + 0.144 * bpdCm + 0.032 * acCm - 0.000111 * bpdCm * bpdCm * acCm);
+                    efwKg = kg;
                 }
                 
-                const w = parseFloat(formData.maternalWeight);
-                const h = parseFloat(formData.maternalHeight) / 100;
-                if (w && h) {
-                    const bmi = w / (h * h);
-                    if (bmi > 30) {
-                        score += 10;
-                        if (bmi > 35) score += 5;
-                    }
-                }
+                // Categorical values
+                const smokingVal = formData.smoking === 'Yes' ? 1 : 0;
+                const historyVal = formData.history === 'Yes' ? 1 : 0;
+                const gestDiabetesVal = formData.gestDiabetes === 'Yes' ? 1 : 0;
+                const pregestDiabetesVal = formData.pregestDiabetes === 'Yes' ? 1 : 0;
+                const inductionVal = formData.induction === 'Yes' ? 1 : 0;
+                const epiduralVal = formData.epidural === 'Yes' ? 1 : 0;
+                const vacuumVal = formData.vacuum === 'Yes' ? 1 : 0;
+                const fetalSexMaleVal = formData.fetalSex === 'Male' ? 1 : 0;
                 
-                if (formData.induction === 'Yes') score += 5;
-                if (formData.epidural === 'Yes') score += 5;
+                // Calculate z (Log-odds)
+                const z = -0.861
+                    + 0.362 * age
+                    + 0.193 * totalGestDays
+                    - 0.304 * height
+                    + 0.111 * weight
+                    + 0.111 * weightGain
+                    + 0.069 * prePregWeight
+                    + 0.188 * bmi
+                    - 0.366 * parity
+                    - 0.205 * acBpdDiff
+                    + 0.071 * acBpdR
+                    + 1.392 * efwKg
+                    + 0.218 * smokingVal
+                    + 0.490 * historyVal
+                    + 0.121 * gestDiabetesVal
+                    + 0.015 * pregestDiabetesVal
+                    - 0.115 * inductionVal
+                    - 0.112 * epiduralVal
+                    + 0.575 * vacuumVal
+                    - 0.228 * fetalSexMaleVal;
+                    
+                // Calculate probability p
+                const p = 1 / (1 + Math.exp(-z));
                 
-                const acVal = parseFloat(formData.ac);
-                const bpdVal = parseFloat(formData.bpd);
-                if (acVal && bpdVal) {
-                    const ratio = acVal / bpdVal;
-                    if (ratio > 1.3) score += 10;
-                }
-                
-                if (ac && bpd) {
-                    const diff = ac - bpd;
-                    if (diff > 2.5) score += 10;
-                }
-                
-                // Limit scores
-                score = Math.max(5, Math.min(99, score));
+                // Convert probability to score percentage (5-99)
+                const score = Math.max(5, Math.min(99, Math.round(p * 100)));
                 lastPreBirthScore = score;
                 
-                // Settle ranges
+                // Settle categories based on clinical thresholds
                 let category = 'Low';
                 let color = '#18C07A';
                 let catKey = 'resultCatLow';
                 let advKey = 'resultAdviceLow';
                 
-                if (score >= 31 && score <= 70) {
+                if (score >= 5 && score < 15) {
                     category = 'Medium';
                     color = '#FFC107';
                     catKey = 'resultCatMed';
                     advKey = 'resultAdviceMed';
-                } else if (score > 70) {
+                } else if (score >= 15) {
                     category = 'High';
                     color = '#EA4335';
                     catKey = 'resultCatHigh';
@@ -2204,7 +2294,7 @@
             
             // Re-validate radio button texts representation
             const radios = [
-                'pregestDiabetes', 'gestDiabetes', 'insulin', 'history', 'induction', 'epidural',
+                'pregestDiabetes', 'gestDiabetes', 'insulin', 'history', 'smoking', 'induction', 'epidural',
                 'vacuum', 'crediManeuver', 'shoulderDystocia', 'hie', 'clavicleFracture', 'moroWeakness', 'pph', 'perianalTear'
             ];
             radios.forEach(key => {
@@ -2218,6 +2308,12 @@
                 const naEl = document.getElementById(`${key}-NA`);
                 if (naEl) naEl.innerText = 'N/A';
             });
+
+            // Set fetalSex text content based on selected locale
+            const femaleEl = document.getElementById('fetalSex-Female');
+            if (femaleEl) femaleEl.innerText = (currentLang === 'tr') ? 'Kız' : 'Female';
+            const maleEl = document.getElementById('fetalSex-Male');
+            if (maleEl) maleEl.innerText = (currentLang === 'tr') ? 'Erkek' : 'Male';
 
             // Re-trigger calculation if has results
             const scoreText = document.getElementById('gauge-score').innerText;
@@ -2255,6 +2351,8 @@
                 gestDiabetes: 'No',
                 insulin: 'No',
                 history: 'No',
+                smoking: 'No',
+                fetalSex: 'Female',
                 induction: 'No',
                 epidural: 'No',
                 vacuum: 'No',
