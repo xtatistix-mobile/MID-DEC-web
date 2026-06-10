@@ -999,16 +999,14 @@
             <a href="#" class="navbar-brand">
                 <img src="./assets/logo.png" alt="MİD-DEC" class="navbar-logo" />
                 <span>MİD-DEC</span>
-            </a>
-            <div class="navbar-menu">
+                      <div class="navbar-menu">
                 <a href="#about-anchor" class="navbar-link" data-i18n="navAbout">Hakkında</a>
                 <a href="#calculator-anchor" class="navbar-link" data-i18n="navTool">Risk Hesaplayıcı</a>
-                <a href="#download-anchor" class="navbar-link" data-i18n="navDownload">Uygulamayı İndir</a>
                 <button class="lang-toggle" id="lang-btn" onclick="toggleLanguage()">EN</button>
-                <button class="btn-primary-gradient" id="nav-login-btn" onclick="launchApp()" data-i18n="navLaunchWeb">Sisteme Giriş Yap</button>
+                <button class="btn-primary-gradient" id="nav-download-btn" onclick="document.getElementById('download-anchor').scrollIntoView({behavior: 'smooth'})" data-i18n="navDownload">Uygulamayı İndir</button>
             </div>
         </nav>
-
+ 
         <div class="main-container">
             <!-- Hero section -->
             <header class="hero">
@@ -1017,8 +1015,8 @@
                     <h1 class="hero-title" data-i18n="heroTitle">Klinik Hassasiyetle Omuz Distosisi Risk Öngörüsü</h1>
                     <p class="hero-sub" data-i18n="heroSub">Gebelik öncesi, maternal ve fetal ultrasonografik verileri bir araya getiren kanıta dayalı, dinamik risk değerlendirme aracı.</p>
                     <div class="hero-actions">
-                        <button class="btn-primary-gradient" id="hero-login-btn" onclick="launchApp()" data-i18n="heroBtnLaunchWeb">Sisteme Giriş Yap (Web Sürümü)</button>
-                        <a href="#download-anchor" class="btn-secondary" id="hero-download-btn" data-i18n="heroBtnDownload">Mobil Uygulamayı İndir</a>
+                        <button class="btn-primary-gradient" id="hero-download-btn" onclick="document.getElementById('download-anchor').scrollIntoView({behavior: 'smooth'})" data-i18n="heroBtnDownload">Mobil Uygulamayı İndir</button>
+                        <a href="#calculator-anchor" class="btn-secondary" id="hero-try-btn" data-i18n="heroBtnTry">Ücretsiz Hesaplayıcıyı Dene</a>
                     </div>
                 </div>
                 <div class="hero-visual">
@@ -1521,12 +1519,10 @@
                 navAbout: "Hakkında",
                 navTool: "Risk Hesaplayıcı",
                 navDownload: "Uygulamayı İndir",
-                navLaunchWeb: "Sisteme Giriş Yap",
                 tagline: "Omuz Distosisi Risk Öngörü Sistemi",
                 heroTitle: "Klinik Hassasiyetle Omuz Distosisi Risk Öngörüsü",
                 heroSub: "Gebelik öncesi, maternal ve fetal ultrasonografik verileri bir araya getiren kanıta dayalı, dinamik risk değerlendirme aracı.",
                 heroBtnTry: "Ücretsiz Hesaplayıcıyı Dene",
-                heroBtnLaunchWeb: "Sisteme Giriş Yap (Web Sürümü)",
                 heroBtnDownload: "Mobil Uygulamayı İndir",
                 heroCardTitle: "MİD-DEC Risk Modeli",
                 heroCardDesc: "Omuz distosisi gelişim riskini klinik parametreler ve ultrason ölçümleriyle anında analiz edin.",
@@ -1620,12 +1616,10 @@
                 navAbout: "About",
                 navTool: "Risk Calculator",
                 navDownload: "Download App",
-                navLaunchWeb: "Log In",
                 tagline: "Shoulder Dystocia Risk Prediction",
                 heroTitle: "Predict Shoulder Dystocia with Clinical Precision",
                 heroSub: "Evidence-based, dynamic risk assessment combining pre-pregnancy, maternal, and fetal ultrasonographic data.",
                 heroBtnTry: "Try Free Calculator",
-                heroBtnLaunchWeb: "Access Web App",
                 heroBtnDownload: "Download Mobile App",
                 heroCardTitle: "MİD-DEC Risk Model",
                 heroCardDesc: "Instantly analyze the risk of shoulder dystocia using clinical parameters and ultrasound measurements.",
@@ -2240,14 +2234,9 @@
             i18nElements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (TRANSLATIONS[currentLang][key]) {
-                    el.innerText = TRANSLATIONS[currentLang][key];
+                    el.innerHTML = TRANSLATIONS[currentLang][key];
                 }
             });
-        }
-
-        // Launch app router (Sets search parameters to load Expo App)
-        function launchApp() {
-            window.location.search = '?app=true';
         }
 
         function downloadApk() {
