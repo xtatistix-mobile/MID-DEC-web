@@ -1,5 +1,7 @@
 # MİD-DEC | Omuz Distosisi Risk Öngörü Sistemi (Web & PWA)
 
+Web: https://xtatistix-mobile.github.io/MID-DEC-web/
+
 MİD-DEC, klinik profesyonelleri (hekimler, ebeler ve hemşireler) için omuz distosisi riskini doğum öncesinde öngörmek ve doğum sonrasında ciddiyet kategorisini derecelendirmek amacıyla geliştirilmiş tıbbi bir karar destek aracıdır.
 
 Bu depo, MİD-DEC mobil uygulamasının web arayüzünü, tanıtım/açılış sayfasını, interaktif demo hesaplayıcılarını ve PWA (İlerici Web Uygulaması) dağıtım dosyalarını içermektedir.
