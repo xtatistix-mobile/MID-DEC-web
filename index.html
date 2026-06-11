@@ -1246,6 +1246,24 @@
                             </div>
                             <div class="result-category-badge" id="result-badge" data-i18n="resultCatLow">Düşük Risk</div>
                             <p class="result-advice" id="result-advice" data-i18n="resultAdviceLow">Klinik takip önerilir. Omuz distosisi riski standart popülasyon düzeyindedir.</p>
+                            
+                            <!-- Post-Birth Outcome Report Panel -->
+                            <div id="post-birth-report" style="display: none; margin-top: 20px; border-top: 1px solid #e8ecf4; padding-top: 20px; text-align: left; font-size: 13px;">
+                                <h4 style="margin: 0 0 10px; color: #365C67; font-weight: 700; font-size: 14px;" data-i18n="postBirthReportTitle">Doğum Sonu Bulguları Özeti</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin-bottom: 12px;">
+                                    <div><strong>Doğum Ağırlığı:</strong> <span id="report-birth-weight">—</span></div>
+                                    <div><strong>APGAR (1.dk / 5.dk):</strong> <span id="report-apgar">—</span></div>
+                                    <div><strong>Vakum Kullanımı:</strong> <span id="report-vacuum">—</span></div>
+                                    <div><strong>Kristeller Manevrası:</strong> <span id="report-credi">—</span></div>
+                                    <div><strong>Omuz Distosisi:</strong> <span id="report-shoulder">—</span></div>
+                                </div>
+                                <div style="margin-top: 10px;">
+                                    <strong style="display: block; margin-bottom: 6px;" data-i18n="lblComplicationsList">Kaydedilen Komplikasyonlar:</strong>
+                                    <ul id="report-complications-list" style="margin: 0; padding-left: 20px; color: #ea4356;">
+                                        <li>—</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1293,13 +1311,13 @@
                 feat1Desc: "Doğum öncesi ultrasonografik biyometri parametrelerini kullanarak risk olasılığını saniyeler içinde hesaplar.",
                 feat2Title: "Kanıta Dayalı Formüller",
                 feat2Desc: "Warsof ve Hadlock fetal ağırlık modelleri ile AC/BPD farklarını temel alan bilimsel altyapı.",
-                feat3Title: "Doğum Sonrası Değerlendirme",
-                feat3Desc: "Doğum esnasında gelişen omuz distosisi ciddiyetini ve olası komplikasyon derecesini puanlar.",
+                feat3Title: "Doğum Sonrası Doğrulama",
+                feat3Desc: "Doğum sonrasında gerçekleşen bulguları kaydederek doğum öncesi risk modelinin doğruluğunu teyit eder.",
                 calcTitle: "MİD-DEC Risk Öngörü Aracı (Demo)",
                 calcSub: "Aşağıdaki klinik verileri girerek doğum öncesi risk puanını anında hesaplayabilirsiniz. Girilen veriler hiçbir şekilde kaydedilmemektedir.",
-                calcSubPost: "Doğum sırasında gelişen omuz distosisinin ciddiyetini ve olası komplikasyon derecesini puanlayın. Veriler kaydedilmemektedir.",
+                calcSubPost: "Doğum sonrasında gerçekleşen bulguları ve komplikasyon verilerini kaydedin. Bu form omuz distosisi riskini hesaplamak yerine, doğum öncesi tahmini doğrulamak için veri toplar.",
                 modePreBirth: "Doğum Öncesi Risk",
-                modePostBirth: "Doğum Sonrası Risk",
+                modePostBirth: "Doğum Sonrası Doğrulama",
                 calcTabMaternal: "1. Maternal Veriler",
                 calcTabFetal: "2. Fetal Biyometri",
                 calcTabInterventions: "3. Müdahaleler",
@@ -1351,14 +1369,18 @@
                 resultAdviceLow: "Klinik takip önerilir. Omuz distosisi riski standart popülasyon düzeyindedir.",
                 resultAdviceMed: "Dikkatli olunmalıdır. Doğum ekibi omuz distosisi manevraları konusunda hazırlıklı olmalı, doğum ilerleyişi yakından izlenmelidir.",
                 resultAdviceHigh: "Yüksek Risk Grubu! Vajinal doğum planlaması yeniden gözden geçirilmeli, omuz distosisi acil eylem planı hazır tutulmalıdır.",
-                postResultTitle: "Doğum Sonrası Değerlendirme Sonucu",
-                postResultScore: "Ciddiyet Puanı",
-                postResultCatMild: "Hafif / Normal",
-                postResultCatModerate: "Orta Derece Ciddiyet",
-                postResultCatSevere: "Ciddi Omuz Distosisi ve Komplikasyon",
-                postResultAdviceMild: "Hafif veya komplikasyonsuz omuz distosisi süreci. Standart yenidoğan ve postpartum bakım önerilir.",
-                postResultAdviceModerate: "Orta derecede omuz distosisi ve olası komplikasyonlar. Yenidoğanın fiziksel muayenesi (özellikle klavikula ve moro refleksi) ve maternal postpartum hemoraji yönünden takip önerilir.",
-                postResultAdviceSevere: "Ciddi komplikasyon veya asfiksi riski! Yenidoğanın HIE yönünden yenidoğan yoğun bakım ünitesinde izlenmesi ve maternal postpartum yakın takip önerilir.",
+                postResultTitle: "Doğum Sonrası Değerlendirme Raporu",
+                postResultScore: "Risk Puanı",
+                postResultCatMild: "Düşük Risk",
+                postResultCatModerate: "Orta Risk",
+                postResultCatSevere: "Yüksek Risk",
+                postResultAdviceMild: "Klinik takip önerilir. Omuz distosisi riski standart popülasyon düzeyindedir.",
+                postResultAdviceModerate: "Dikkatli olunmalıdır. Doğum ekibi omuz distosisi manevraları konusunda hazırlıklı olmalı, doğum ilerleyişi yakından izlenmelidir.",
+                postResultAdviceSevere: "Yüksek Risk Grubu! Vajinal doğum planlaması yeniden gözden geçirilmeli, omuz distosisi acil eylem planı hazır tutulmalıdır.",
+                btnCompletePost: "Sonuçları Kaydet",
+                postBirthReportTitle: "Doğum Sonu Bulguları Özeti",
+                lblComplicationsList: "Kaydedilen Komplikasyonlar:",
+                lblNoComplications: "Herhangi bir komplikasyon bildirilmemiştir.",
                 derivedBmi: "Hesaplanan BMI",
                 derivedEfw: "Tahmini Bebek Ağırlığı (Warsof)",
                 derivedRatio: "AC / BPD Oranı",
@@ -1383,13 +1405,13 @@
                 feat1Desc: "Computes risk probability in seconds using pre-birth ultrasonographic biometry parameters.",
                 feat2Title: "Evidence-Based Formulas",
                 feat2Desc: "Scientific framework based on Warsof and Hadlock fetal weight models and AC/BPD differences.",
-                feat3Title: "Post-Birth Severity Rating",
-                feat3Desc: "Scores the severity of shoulder dystocia during delivery and associated complications.",
+                feat3Title: "Post-Birth Verification",
+                feat3Desc: "Records postpartum outcomes to validate the accuracy of the pre-birth risk prediction model.",
                 calcTitle: "MİD-DEC Risk Calculator (Demo)",
                 calcSub: "Enter the clinical parameters below to compute the pre-birth risk score instantly. Entered data is processed locally and never saved.",
-                calcSubPost: "Score the severity of shoulder dystocia during delivery and associated complications. Data is processed locally.",
+                calcSubPost: "Record birth outcomes and adverse neonatal/maternal complications. This form collects data to validate the pre-birth estimation, rather than calculating a new risk score.",
                 modePreBirth: "Pre-Birth Risk",
-                modePostBirth: "Post-Birth Severity",
+                modePostBirth: "Post-Birth Verification",
                 calcTabMaternal: "1. Maternal Data",
                 calcTabFetal: "2. Fetal Biometry",
                 calcTabInterventions: "3. Interventions",
@@ -1441,14 +1463,18 @@
                 resultAdviceLow: "Clinical follow-up recommended. Shoulder dystocia risk is at standard population levels.",
                 resultAdviceMed: "Caution advised. The delivery team should be prepared for shoulder dystocia maneuvers; labor progress should be closely monitored.",
                 resultAdviceHigh: "High Risk Group! Mode of delivery should be re-evaluated; shoulder dystocia emergency plan must be ready.",
-                postResultTitle: "Post-Birth Assessment Result",
-                postResultScore: "Severity Score",
-                postResultCatMild: "Mild / Normal",
-                postResultCatModerate: "Moderate Severity",
-                postResultCatSevere: "Severe Shoulder Dystocia & Complications",
-                postResultAdviceMild: "Mild or uncomplicated delivery outcome. Standard neonatal and postpartum care recommended.",
-                postResultAdviceModerate: "Moderate shoulder dystocia or neonatal findings. Close physical examination (especially clavicle and Moro reflex) and maternal follow-up for PPH recommended.",
-                postResultAdviceSevere: "Severe complication or asphyxia risk! Neonatal intensive care unit observation for HIE and close maternal monitoring recommended.",
+                postResultTitle: "Post-Birth Assessment Report",
+                postResultScore: "Risk Score",
+                postResultCatMild: "Low Risk",
+                postResultCatModerate: "Medium Risk",
+                postResultCatSevere: "High Risk",
+                postResultAdviceMild: "Clinical follow-up recommended. Shoulder dystocia risk is at standard population levels.",
+                postResultAdviceModerate: "Caution advised. The delivery team should be prepared for shoulder dystocia maneuvers; labor progress should be closely monitored.",
+                postResultAdviceSevere: "High Risk Group! Mode of delivery should be re-evaluated; shoulder dystocia emergency plan must be ready.",
+                btnCompletePost: "Save Outcome",
+                postBirthReportTitle: "Post-Birth Outcome Summary",
+                lblComplicationsList: "Complications Detected:",
+                lblNoComplications: "No complications were reported.",
                 derivedBmi: "Calculated BMI",
                 derivedEfw: "Estimated Fetal Weight (Warsof)",
                 derivedRatio: "AC / BPD Ratio",
@@ -1532,6 +1558,14 @@
 
             calcMode = mode;
             
+            // Update section-sub dynamically based on mode
+            const subEl = document.getElementById('calc-sub');
+            if (subEl) {
+                const subKey = (mode === 'pre_birth') ? 'calcSub' : 'calcSubPost';
+                subEl.innerText = TRANSLATIONS[currentLang][subKey];
+                subEl.setAttribute('data-i18n', subKey);
+            }
+            
             // Reset wizard to step 0
             goToStep(0);
 
@@ -1558,6 +1592,11 @@
             if (resTitle) {
                 resTitle.innerText = TRANSLATIONS[currentLang][calcMode === 'pre_birth' ? 'resultTitle' : 'postResultTitle'];
                 resTitle.setAttribute('data-i18n', calcMode === 'pre_birth' ? 'resultTitle' : 'postResultTitle');
+            }
+
+            const reportPanel = document.getElementById('post-birth-report');
+            if (reportPanel) {
+                reportPanel.style.display = 'none';
             }
         }
 
@@ -1592,8 +1631,9 @@
             
             const nextBtn = document.getElementById('next-btn');
             if (currentStep === 2) {
-                nextBtn.innerText = TRANSLATIONS[currentLang].btnCalculate;
-                nextBtn.setAttribute('data-i18n', 'btnCalculate');
+                const btnKey = (calcMode === 'pre_birth') ? 'btnCalculate' : 'btnCompletePost';
+                nextBtn.innerText = TRANSLATIONS[currentLang][btnKey];
+                nextBtn.setAttribute('data-i18n', btnKey);
             } else {
                 nextBtn.innerText = TRANSLATIONS[currentLang].btnNext;
                 nextBtn.setAttribute('data-i18n', 'btnNext');
@@ -1885,69 +1925,87 @@
 
                 updateResultUI(score, color, catKey, advKey);
             } else {
-                // Post-Birth ciddiyet skoru
-                let score = 0;
+                // Post-Birth Outcome data collection (No score calculation)
+                // We show the pre-birth risk score if available.
+                const score = lastPreBirthScore || 0;
 
-                if (formData.shoulderDystocia === 'Yes') score += 30;
-                if (formData.vacuum === 'Yes') score += 10;
-                if (formData.crediManeuver === 'Yes') score += 10;
+                if (score === 0) {
+                    const gaugeFill = document.getElementById('gauge-fill');
+                    gaugeFill.style.strokeDashoffset = 125.66;
+                    gaugeFill.style.stroke = '#81B7C3';
+                    document.getElementById('gauge-score').innerText = '—';
+                    
+                    const badge = document.getElementById('result-badge');
+                    badge.innerText = '—';
+                    badge.style.background = 'transparent';
+                    badge.style.color = '#687684';
 
-                const apgar1 = parseInt(formData.apgar1) || 0;
-                if (apgar1 < 7) {
-                    score += 10;
-                    if (apgar1 < 4) score += 5;
+                    const advice = document.getElementById('result-advice');
+                    advice.innerText = (currentLang === 'tr') ? 'Lütfen önce Doğum Öncesi Risk hesaplaması yapın.' : 'Please calculate the Pre-Birth Risk first.';
+                    advice.removeAttribute('data-i18n');
+                } else {
+                    let color = '#18C07A';
+                    let catKey = 'resultCatLow';
+                    let advKey = 'resultAdviceLow';
+                    
+                    if (score >= 5 && score < 15) {
+                        color = '#FFC107';
+                        catKey = 'resultCatMed';
+                        advKey = 'resultAdviceMed';
+                    } else if (score >= 15) {
+                        color = '#EA4335';
+                        catKey = 'resultCatHigh';
+                        advKey = 'resultAdviceHigh';
+                    }
+                    
+                    updateResultUI(score, color, catKey, advKey);
                 }
 
-                const apgar5 = parseInt(formData.apgar5) || 0;
-                if (apgar5 < 7) {
-                    score += 15;
-                    if (apgar5 < 4) score += 5;
+                // Show post-birth outcome report panel
+                const reportPanel = document.getElementById('post-birth-report');
+                if (reportPanel) {
+                    reportPanel.style.display = 'block';
+                    
+                    // Update report contents
+                    const birthWeight = document.getElementById('birthWeight')?.value || '—';
+                    const apgar1 = document.getElementById('apgar1')?.value || '—';
+                    const apgar5 = document.getElementById('apgar5')?.value || '—';
+                    
+                    document.getElementById('report-birth-weight').innerText = birthWeight ? `${birthWeight} g` : '—';
+                    document.getElementById('report-apgar').innerText = `${apgar1} / ${apgar5}`;
+                    
+                    const yesText = currentLang === 'tr' ? 'Evet' : 'Yes';
+                    const noText = currentLang === 'tr' ? 'Hayır' : 'No';
+                    
+                    document.getElementById('report-vacuum').innerText = formData.vacuum === 'Yes' ? yesText : noText;
+                    document.getElementById('report-credi').innerText = formData.crediManeuver === 'Yes' ? yesText : noText;
+                    document.getElementById('report-shoulder').innerText = formData.shoulderDystocia === 'Yes' ? yesText : noText;
+                    
+                    const complications = [];
+                    if (formData.hie === 'Yes') complications.push(currentLang === 'tr' ? 'HIE (Hipoksik İskemik Ensefalopati)' : 'HIE (Hypoxic-Ischemic Encephalopathy)');
+                    if (formData.clavicleFracture === 'Yes') complications.push(currentLang === 'tr' ? 'Klavikula Kırığı' : 'Clavicle Fracture');
+                    if (formData.moroWeakness === 'Yes') complications.push(currentLang === 'tr' ? 'Moro Refleksinde Güçsüzlük' : 'Moro Reflex Weakness');
+                    if (formData.pph === 'Yes') complications.push(currentLang === 'tr' ? 'PPH (Postpartum Kanama)' : 'PPH (Postpartum Hemorrhage)');
+                    if (formData.perianalTear === 'Yes') complications.push(currentLang === 'tr' ? 'Perianal Yırtık (3./4. derece)' : 'Perianal Tear (3rd/4th degree)');
+                    
+                    const listEl = document.getElementById('report-complications-list');
+                    if (listEl) {
+                        listEl.innerHTML = '';
+                        if (complications.length === 0) {
+                            const li = document.createElement('li');
+                            li.innerText = TRANSLATIONS[currentLang].lblNoComplications;
+                            li.style.color = '#18C07A';
+                            li.style.fontStyle = 'italic';
+                            listEl.appendChild(li);
+                        } else {
+                            complications.forEach(c => {
+                                const li = document.createElement('li');
+                                li.innerText = c;
+                                listEl.appendChild(li);
+                            });
+                        }
+                    }
                 }
-
-                if (formData.hie === 'Yes') score += 20;
-                if (formData.clavicleFracture === 'Yes') score += 15;
-                if (formData.moroWeakness === 'Yes') score += 15;
-                if (formData.pph === 'Yes') score += 20;
-                if (formData.perianalTear === 'Yes') score += 15;
-
-                // Linked pre-birth score > 70
-                if (lastPreBirthScore > 70) {
-                    score += 10;
-                }
-
-                // Diabetes history (pregest, gest or insulin)
-                if (formData.pregestDiabetes === 'Yes' || formData.gestDiabetes === 'Yes' || formData.insulin === 'Yes') {
-                    score += 5;
-                }
-
-                // Fetal weight effect: actual birth weight > 4000
-                const birthWeight = parseFloat(formData.birthWeight) || 0;
-                if (birthWeight > 4000) {
-                    score += 10;
-                }
-
-                // Limit scores
-                score = Math.max(0, Math.min(100, score));
-
-                // Settle ranges
-                let category = 'Low';
-                let color = '#18C07A';
-                let catKey = 'postResultCatMild';
-                let advKey = 'postResultAdviceMild';
-
-                if (score >= 21 && score <= 50) {
-                    category = 'Medium';
-                    color = '#FFC107';
-                    catKey = 'postResultCatModerate';
-                    advKey = 'postResultAdviceModerate';
-                } else if (score > 50) {
-                    category = 'High';
-                    color = '#EA4335';
-                    catKey = 'postResultCatSevere';
-                    advKey = 'postResultAdviceSevere';
-                }
-
-                updateResultUI(score, color, catKey, advKey);
             }
         }
 
@@ -1980,7 +2038,8 @@
             // Re-apply current step button naming
             const nextBtn = document.getElementById('next-btn');
             if (currentStep === 2) {
-                nextBtn.innerText = TRANSLATIONS[currentLang].btnCalculate;
+                const btnKey = (calcMode === 'pre_birth') ? 'btnCalculate' : 'btnCompletePost';
+                nextBtn.innerText = TRANSLATIONS[currentLang][btnKey];
             } else {
                 nextBtn.innerText = TRANSLATIONS[currentLang].btnNext;
             }
@@ -2064,7 +2123,6 @@
             updateDOMTexts();
         });
     </script>
-<script src="./_expo/static/js/web/AppEntry-f68cfe8bb5e402e44a7bea236727e701.js" defer></script>
 </body>
 
 </html>
