@@ -385,6 +385,230 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
+        /* Legal Notice & Consent Style */
+        .legal-consent-card {
+            display: flex;
+            flex-direction: column;
+            background: #FFFFFF;
+            animation: fadeIn 0.35s ease-out;
+        }
+        
+        .legal-scroll-container {
+            max-height: 380px;
+            overflow-y: auto;
+            border: 1px solid #E4ECEE;
+            border-radius: 18px;
+            padding: 24px;
+            background: #FAFCFC;
+            margin-bottom: 24px;
+            scrollbar-width: thin;
+            scrollbar-color: #81B7C3 #FAFCFC;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.01);
+        }
+        
+        .legal-scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .legal-scroll-container::-webkit-scrollbar-track {
+            background: #FAFCFC;
+        }
+        .legal-scroll-container::-webkit-scrollbar-thumb {
+            background-color: #81B7C3;
+            border-radius: 3px;
+        }
+
+        .legal-kunye-card {
+            background: rgba(129, 183, 195, 0.1);
+            border: 1px solid rgba(129, 183, 195, 0.15);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 22px;
+        }
+
+        .legal-kunye-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: #687684;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .legal-kunye-text + .legal-kunye-text {
+            margin-top: 12px;
+        }
+
+        .legal-big-heading {
+            font-size: 16px;
+            font-weight: 800;
+            color: #365C67;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid #F1F3F5;
+            letter-spacing: -0.2px;
+        }
+
+        .legal-section {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+        .legal-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .legal-section-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #1E232C;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .legal-paragraph {
+            font-size: 13.5px;
+            color: #687684;
+            line-height: 1.6;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        
+        .legal-bullet-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            font-size: 13.5px;
+            color: #687684;
+            line-height: 1.6;
+        }
+        
+        .legal-bullet-dot {
+            width: 6px;
+            height: 6px;
+            background: #81B7C3;
+            border-radius: 50%;
+            margin-top: 8px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .legal-bullet-term {
+            font-weight: 700;
+            color: #1E232C;
+        }
+
+        .consents-card {
+            background: #FAFCFC;
+            border: 1px solid #E4ECEE;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .consents-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #365C67;
+            margin-top: 0;
+            margin-bottom: 18px;
+            letter-spacing: -0.2px;
+        }
+
+        .consent-checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .consent-checkbox-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .consent-checkbox-row input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #94A0AB;
+            border-radius: 6px;
+            margin-top: 2px;
+            margin-right: 14px;
+            outline: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            background: #FFFFFF;
+        }
+
+        .consent-checkbox-row input[type="checkbox"]:checked {
+            background: #365C67;
+            border-color: #365C67;
+        }
+
+        .consent-checkbox-row input[type="checkbox"]:checked::after {
+            content: "✓";
+            color: #FFFFFF;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .consent-label {
+            font-size: 13.5px;
+            color: #687684;
+            line-height: 1.5;
+        }
+
+        .btn-legal-start {
+            width: 100%;
+            height: 54px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            color: #FFFFFF;
+            background: linear-gradient(135deg, #81B7C3 0%, #365C67 100%);
+            box-shadow: 0 4px 15px rgba(54, 92, 103, 0.15);
+            transition: all 0.25s ease;
+        }
+
+        .btn-legal-start:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(54, 92, 103, 0.25);
+        }
+
+        .btn-legal-start:disabled {
+            background: #E4ECEE;
+            color: #94A0AB;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .legal-scroll-container {
+                max-height: 280px;
+                padding: 16px;
+            }
+            .consents-card {
+                padding: 16px;
+            }
+        }
+
         /* Interactive Calculator Area */
         .calculator-section {
             background: #FFFFFF;
@@ -1083,12 +1307,151 @@
                     <p class="section-sub" id="calc-sub" data-i18n="calcSub">Aşağıdaki klinik verileri girerek doğum öncesi risk puanını anında hesaplayabilirsiniz. Girilen veriler hiçbir şekilde kaydedilmemektedir.</p>
                 </div>
 
-                <div class="calc-mode-selector">
-                    <button class="mode-btn active" id="mode-btn-pre" onclick="setCalcMode('pre_birth')" data-i18n="modePreBirth">Doğum Öncesi Risk</button>
-                    <button class="mode-btn" id="mode-btn-post" onclick="setCalcMode('post_birth')" data-i18n="modePostBirth">Doğum Sonrası Risk</button>
+
+                <!-- Legal Notice and Consent Gate -->
+                <div id="legal-consent-container" class="legal-consent-card">
+                    <div class="legal-scroll-container">
+                        <div class="legal-kunye-card">
+                            <p class="legal-kunye-text" data-i18n="legalKunyeBody">MID-DEC Risk Calculator, T.C. Türk Patent ve Marka Kurumu nezdinde 2026/016909 başvuru numarası ile yasal koruma altındadır. Uygulamanın yazılımı, algoritması, tasarımı ve içeriğine ilişkin tüm fikri ve mülkiyet hakları saklıdır.</p>
+                            <p class="legal-kunye-text" data-i18n="legalKunyeBody2">Bu uygulama; kullanıcıyı bilgilendirme ve akademik veri toplama amacıyla geliştirilmiştir. Sunulan sonuçlar tıbbi bir tanı veya teşhis niteliği taşımadığı gibi, herhangi bir yasal süreçte bağlayıcılığı bulunmamaktadır. Uygulama kapsamında toplanan veriler, 6698 sayılı KVKK uyarınca tamamen anonimleştirilerek bilimsel araştırma ve akademik yayınlarda kullanılabilir.</p>
+                        </div>
+
+                        <h3 class="legal-big-heading" data-i18n="legalPrivacyTitle">Gizlilik Bildirimi ve Kullanım Koşulları</h3>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalDisclaimerTitle">Önemli Uyarı ve Klinik Sorumluluk Reddi</h4>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalDisclaimer1Term">Tanı Niteliği</span>: <span data-i18n="legalDisclaimer1Text">Bu uygulama klinik karar destek amaçlıdır. İçerisinde sunulan analizler, grafikler veya risk skorları makine öğrenimi tabanlı bir risk öngörüsüdür. Tek başına tıbbi tanı niteliği taşımaz.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalDisclaimer2Term">Klinik Sınırlar</span>: <span data-i18n="legalDisclaimer2Text">Uygulama, bilimsel validasyon çalışmaları doğrultusunda 34 hafta (34+0) ve üzeri tekil gebelik verileriyle çalışmak üzere tasarlanmıştır. Bu sınırın altındaki girişler hatalı sonuçlar doğurabilir.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalDisclaimer3Term">Hukuki Geçersizlik</span>: <span data-i18n="legalDisclaimer3Text">Uygulama çıktıları adli süreçlerde hukuki bir delil veya resmi rapor olarak kullanılamaz; geliştirici ekibin ve bağlı kurumların bu kapsamda hiçbir yasal sorumluluğu bulunmamaktadır.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalDisclaimer4Term">Karar Esası</span>: <span data-i18n="legalDisclaimer4Text">Uygulamanın sunduğu risk öngörüsü, hekim ve ebe kararına yardımcı bir unsurdur; her vakada klinik değerlendirme, hekim ve ebe kararı esastır.</span></div>
+                            </div>
+                        </div>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalDataTitle">Veri Politikası ve Güvenliği Protokolü</h4>
+                            <p class="legal-paragraph" data-i18n="legalDataIntro">Bu protokol, 6698 sayılı KVKK ve uluslararası veri güvenliği standartları (SSL/TLS, 2FA) doğrultusunda, kullanıcı ve hasta verilerinin tam gizliliğini sağlamayı hedefler.</p>
+                        </div>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalSec21Title">2.1. Veri Güvenliği ve Koruma Önlemleri</h4>
+                            <p class="legal-paragraph" data-i18n="legalSec21Intro">Uygulamamız, hassas sağlık verilerini yetkisiz erişimden korumak için çok katmanlı bir güvenlik yapısı kullanır:</p>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec21Bullet1Term">Uçtan Uca Şifreleme</span>: <span data-i18n="legalSec21Bullet1Text">Veriler, cihazda saklanırken ve sunucuya transfer edilirken SSL/TLS protokolleri ile şifrelenir.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec21Bullet2Term">Düzenli Denetim ve Analiz</span>: <span data-i18n="legalSec21Bullet2Text">Yazılım geliştirme sürecinde statik ve dinamik güvenlik testleri yapılarak olası açıklar önceden kapatılır.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec21Bullet3Term">Veri Yedekleme</span>: <span data-i18n="legalSec21Bullet3Text">Olası veri kayıplarının önüne geçmek için bulut tabanlı sistemlerde düzenli ve güvenli yedekleme prosedürleri uygulanır.</span></div>
+                            </div>
+                        </div>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalSec22Title">2.2. Şeffaflık</h4>
+                            <p class="legal-paragraph" data-i18n="legalSec22Intro">Uygulama ayarlar bölümünde kullanıcıya şu şeffaflıklar sunulur:</p>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec22Bullet1Term">Toplama ve Paylaşım Beyanı</span>: <span data-i18n="legalSec22Bullet1Text">Kullanıcıya ait konum, rehber veya finansal bilgiler gibi gereksiz veriler kesinlikle toplanmaz. Sadece analiz için gereken klinik veriler anonimleştirilerek işlenir.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec22Bullet2Term">Veri Silme Hakkı</span>: <span data-i18n="legalSec22Bullet2Text">Kullanıcılar, diledikleri takdirde hesaplarını kapatma ve verilerinin sunucularımızdan kalıcı olarak silinmesini talep etme hakkına sahiptir.</span></div>
+                            </div>
+                        </div>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalSec23Title">2.3. Yasal Uyum ve KVKK Bildirimi</h4>
+                            <p class="legal-paragraph" data-i18n="legalSec23Intro">Geliştiriciler olarak, kullanıcılarimizi verilerin işlenme amacı ve saklama süreleri hakkında şeffaf bir şekilde bilgilendiririz:</p>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec23Bullet1Term">Aydınlatma Metni</span>: <span data-i18n="legalSec23Bullet1Text">Kullanıcı, uygulama girişi sırasında verilerin akademik amaçlarla kullanılacağını belirten bir aydınlatma metni ile karşılanır.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec23Bullet2Term">Gizlilik Politikası</span>: <span data-i18n="legalSec23Bullet2Text">Verilerin kiminle paylaşılacağı ve saklama protokolleri, uygulama içi gizlilik politikasında detaylıca sunulur.</span></div>
+                            </div>
+                        </div>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalSec24Title">2.4. Kullanıcı Odaklı Güvenlik ve İzin Yönetimi</h4>
+                            <p class="legal-paragraph" data-i18n="legalSec24Intro">Uygulama, kullanıcı güvenliğini en üstte tutmak için şu prensiplere dayanır:</p>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec24Bullet1Term">Minimum İzin İlkesi</span>: <span data-i18n="legalSec24Bullet1Text">Uygulama, sadece işlevi için zorunlu olan (örneğin internet erişimi) izinleri talep eder; gereksiz sistem izinlerinden kaçınır.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec24Bullet2Term">Güvenli Yükleme</span>: <span data-i18n="legalSec24Bullet2Text">Veri hırsızlığı riskini önlemek için uygulamanın yalnızca resmi mağazalardan (Google Play/App Store) yüklenmesi tavsiye edilir.</span></div>
+                            </div>
+                        </div>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalSec3Title">3. Akademik Kullanım ve Fikri Mülkiyet Hakları</h4>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec3Bullet1Term">Araştırma Yetkisi</span>: <span data-i18n="legalSec3Bullet1Text">Toplanan anonim veriler; bilimsel araştırmalar, doktora tez çalışmaları, projeler, akademik yayınlar, uygulamanın geliştirilmesi ve eğitim faaliyetleri kapsamında kullanılabilir.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec3Bullet2Term">Hak İddiası Şerhi</span>: <span data-i18n="legalSec3Bullet2Text">Kullanıcı, verilerin akademik olarak işlenmesini gayrikabili rücu kabul eder. Bu verilerle elde edilecek akademik yayınlar, patentler veya ticari ürünler üzerinde kullanıcının herhangi bir fikri mülkiyet hakkı veya maddi/manevi hak iddiası bulunmamaktadır.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec3Bullet3Term">Telif Hakları</span>: <span data-i18n="legalSec3Bullet3Text">Uygulamanın algoritması ve yöntemleri akademik bir mülkiyet olup, izinsiz kopyalanamaz veya ticari amaçla paylaşılamaz.</span></div>
+                            </div>
+                        </div>
+
+                        <div class="legal-section">
+                            <h4 class="legal-section-title" data-i18n="legalSec4Title">4. Teknik Koşullar ve Güncellik</h4>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec4Bullet1Term">Teknik Kesinti</span>: <span data-i18n="legalSec4Bullet1Text">Uygulamanın kesintisiz çalışması garanti edilmez. Teknik aksaklıklar nedeniyle oluşabilecek erişim sorunlarında standart hastane protokolleri ve klinik öncelikler uygulanmalıdır.</span></div>
+                            </div>
+                            <div class="legal-bullet-row">
+                                <div class="legal-bullet-dot"></div>
+                                <div><span class="legal-bullet-term" data-i18n="legalSec4Bullet2Term">Literatür Takibi</span>: <span data-i18n="legalSec4Bullet2Text">Bu araç, Ocak 2026 tarihi itibarıyla geçerli olan tıbbi literatürle hazırlanmıştır. Güncel tıbbi kılavuzların takibi kullanıcının profesyonel sorumluluğundadır.</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="consents-card">
+                        <h4 class="consents-title" data-i18n="legalConsentTitle">Onaylar</h4>
+                        
+                        <label class="consent-checkbox-row">
+                            <input type="checkbox" id="consent-kvkk" onchange="checkConsentState()" />
+                            <span class="consent-label" id="label-consent-kvkk" data-i18n="legalConsent1">6698 sayılı KVKK uyarınca hazırlanan Aydınlatma Metni'ni okudum. Verilerimin bilimsel ve akademik amaçlarla, kimliğim gizli kalmak kaydıyla işlenmesini kabul ediyorum.</span>
+                        </label>
+                        
+                        <label class="consent-checkbox-row">
+                            <input type="checkbox" id="consent-terms" onchange="checkConsentState()" />
+                            <span class="consent-label" id="label-consent-terms" data-i18n="legalConsent2">Kullanım Koşullarını ve Sorumluluk Reddi beyanını okudum, anladım ve bu şartlar altında uygulamayı kullanmayı kabul ediyorum.</span>
+                        </label>
+                    </div>
+
+                    <button id="btn-legal-start" class="btn-legal-start" disabled onclick="acceptLegalConsent()" data-i18n="legalStart">UYGULAMAYI BAŞLAT</button>
                 </div>
 
-                <div class="calculator-grid">
+                <div id="calculator-interactive-container" style="display: none;">
+                    <div class="calc-mode-selector">
+                        <button class="mode-btn active" id="mode-btn-pre" onclick="setCalcMode('pre_birth')" data-i18n="modePreBirth">Doğum Öncesi Risk</button>
+                        <button class="mode-btn" id="mode-btn-post" onclick="setCalcMode('post_birth')" data-i18n="modePostBirth">Doğum Sonrası Risk</button>
+                    </div>
+
+                    <div class="calculator-grid">
                     <!-- Wizard Forms Area -->
                     <div>
                         <!-- Tabs -->
@@ -1451,11 +1814,11 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
+                </div> <!-- End of calculator-interactive-container -->
             </section>
-
+            
             <!-- Important Medical Disclaimer Banner -->
             <div class="disclaimer-card">
                 <div class="disclaimer-icon-box">
@@ -1639,7 +2002,64 @@
                 dlIosStep2: "AltStore veya Apple Configurator ile cihazınıza yükleyin.",
                 dlIosStep3: "Ayarlar > Genel > VPN ve Cihaz Yönetimi'nden geliştiriciye güvenin.",
                 dlNote: "İndirme bağlantıları en güncel sürüme (v1.7.4) yönlendirir. Kurulum sonrası giriş için yöneticinizin hesabınızı onaylaması gerekir.",
-                footerText: "© 2026 MİD-DEC. Tüm hakları saklıdır. Sağlık profesyonelleri için geliştirilmiştir."
+                footerText: "© 2026 MİD-DEC. Tüm hakları saklıdır. Sağlık profesyonelleri için geliştirilmiştir.",
+                legalTitle: "Uygulama Künyesi ve Yasal Bilgilendirme",
+                legalKunyeBody: "MID-DEC Risk Calculator, T.C. Türk Patent ve Marka Kurumu nezdinde 2026/016909 başvuru numarası ile yasal koruma altındadır. Uygulamanın yazılımı, algoritması, tasarımı ve içeriğine ilişkin tüm fikri ve mülkiyet hakları saklıdır.",
+                legalKunyeBody2: "Bu uygulama; kullanıcıyı bilgilendirme ve akademik veri toplama amacıyla geliştirilmiştir. Sunulan sonuçlar tıbbi bir tanı veya teşhis niteliği taşımadığı gibi, herhangi bir yasal süreçte bağlayıcılığı bulunmamaktadır. Uygulama kapsamında toplanan veriler, 6698 sayılı KVKK uyarınca tamamen anonimleştirilerek bilimsel araştırma ve akademik yayınlarda kullanılabilir.",
+                legalPrivacyTitle: "Gizlilik Bildirimi ve Kullanım Koşulları",
+                legalDisclaimerTitle: "Önemli Uyarı ve Klinik Sorumluluk Reddi",
+                legalDisclaimer1Term: "Tanı Niteliği",
+                legalDisclaimer1Text: "Bu uygulama klinik karar destek amaçlıdır. İçerisinde sunulan analizler, grafikler veya risk skorları makine öğrenimi tabanlı bir risk öngörüsüdür. Tek başına tıbbi tanı niteliği taşımaz.",
+                legalDisclaimer2Term: "Klinik Sınırlar",
+                legalDisclaimer2Text: "Uygulama, bilimsel validasyon çalışmaları doğrultusunda 34 hafta (34+0) ve üzeri tekil gebelik verileriyle çalışmak üzere tasarlanmıştır. Bu sınırın altındaki girişler hatalı sonuçlar doğurabilir.",
+                legalDisclaimer3Term: "Hukuki Geçersizlik",
+                legalDisclaimer3Text: "Uygulama çıktıları adli süreçlerde hukuki bir delil veya resmi rapor olarak kullanılamaz; geliştirici ekibin ve bağlı kurumların bu kapsamda hiçbir yasal sorumluluğu bulunmamaktadır.",
+                legalDisclaimer4Term: "Karar Esası",
+                legalDisclaimer4Text: "Uygulamanın sunduğu risk öngörüsü, hekim ve ebe kararına yardımcı bir unsurdur; her vakada klinik değerlendirme, hekim ve ebe kararı esastır.",
+                legalDataTitle: "Veri Politikası ve Güvenliği Protokolü",
+                legalDataIntro: "Bu protokol, 6698 sayılı KVKK ve uluslararası veri güvenliği standartları (SSL/TLS, 2FA) doğrultusunda, kullanıcı ve hasta verilerinin tam gizliliğini sağlamayı hedefler.",
+                legalSec21Title: "2.1. Veri Güvenliği ve Koruma Önlemleri",
+                legalSec21Intro: "Uygulamamız, hassas sağlık verilerini yetkisiz erişimden korumak için çok katmanlı bir güvenlik yapısı kullanır:",
+                legalSec21Bullet1Term: "Uçtan Uca Şifreleme",
+                legalSec21Bullet1Text: "Veriler, cihazda saklanırken ve sunucuya transfer edilirken SSL/TLS protokolleri ile şifrelenir.",
+                legalSec21Bullet2Term: "Düzenli Denetim ve Analiz",
+                legalSec21Bullet2Text: "Yazılım geliştirme sürecinde statik ve dinamik güvenlik testleri yapılarak olası açıklar önceden kapatılır.",
+                legalSec21Bullet3Term: "Veri Yedekleme",
+                legalSec21Bullet3Text: "Olası veri kayıplarının önüne geçmek için bulut tabanlı sistemlerde düzenli ve güvenli yedekleme prosedürleri uygulanır.",
+                legalSec22Title: "2.2. Şeffaflık",
+                legalSec22Intro: "Uygulama ayarlar bölümünde kullanıcıya şu şeffaflıklar sunulur:",
+                legalSec22Bullet1Term: "Toplama ve Paylaşım Beyanı",
+                legalSec22Bullet1Text: "Kullanıcıya ait konum, rehber veya finansal bilgiler gibi gereksiz veriler kesinlikle toplanmaz. Sadece analiz için gereken klinik veriler anonimleştirilerek işlenir.",
+                legalSec22Bullet2Term: "Veri Silme Hakkı",
+                legalSec22Bullet2Text: "Kullanıcılar, diledikleri takdirde hesaplarını kapatma ve verilerinin sunucularımızdan kalıcı olarak silinmesini talep etme hakkına sahiptir.",
+                legalSec23Title: "2.3. Yasal Uyum ve KVKK Bildirimi",
+                legalSec23Intro: "Geliştiriciler olarak, kullanıcılarımızı verilerin işlenme amacı ve saklama süreleri hakkında şeffaf bir şekilde bilgilendiririz:",
+                legalSec23Bullet1Term: "Aydınlatma Metni",
+                legalSec23Bullet1Text: "Kullanıcı, uygulama girişi sırasında verilerin akademik amaçlarla kullanılacağını belirten bir aydınlatma metni ile karşılanır.",
+                legalSec23Bullet2Term: "Gizlilik Politikası",
+                legalSec23Bullet2Text: "Verilerin kiminle paylaşılacağı ve saklama protokolleri, uygulama içi gizlilik politikasında detaylıca sunulur.",
+                legalSec24Title: "2.4. Kullanıcı Odaklı Güvenlik ve İzin Yönetimi",
+                legalSec24Intro: "Uygulama, kullanıcı güvenliğini en üstte tutmak için şu prensiplere dayanır:",
+                legalSec24Bullet1Term: "Minimum İzin İlkesi",
+                legalSec24Bullet1Text: "Uygulamamız, sadece işlevi için zorunlu olan (örneğin internet erişimi) izinleri talep eder; gereksiz sistem izinlerinden kaçınır.",
+                legalSec24Bullet2Term: "Güvenli Yükleme",
+                legalSec24Bullet2Text: "Veri hırsızlığı riskini önlemek için uygulamanın yalnızca resmi mağazalardan (Google Play/App Store) yüklenmesi tavsiye edilir.",
+                legalSec3Title: "3. Akademik Kullanım ve Fikri Mülkiyet Hakları",
+                legalSec3Bullet1Term: "Araştırma Yetkisi",
+                legalSec3Bullet1Text: "Toplanan anonim veriler; bilimsel araştırmalar, doktora tez çalışmaları, projeler, akademik yayınlar, uygulamanın geliştirilmesi ve eğitim faaliyetleri kapsamında kullanılabilir.",
+                legalSec3Bullet2Term: "Hak İddiası Şerhi",
+                legalSec3Bullet2Text: "Kullanıcı, verilerin akademik olarak işlenmesini gayrikabili rücu kabul eder. Bu verilerle elde edilecek akademik yayınlar, patentler veya ticari ürünler üzerinde kullanıcının herhangi bir fikri mülkiyet hakkı veya maddi/manevi hak iddiası bulunmamaktadır.",
+                legalSec3Bullet3Term: "Telif Hakları",
+                legalSec3Bullet3Text: "Uygulamanın algoritması ve yöntemleri akademik bir mülkiyet olup, izinsiz kopyalanamaz veya ticari amaçla paylaşılamaz.",
+                legalSec4Title: "4. Teknik Koşullar ve Güncellik",
+                legalSec4Bullet1Term: "Teknik Kesinti",
+                legalSec4Bullet1Text: "Uygulamanın kesintisiz çalışması garanti edilmez. Teknik aksaklıklar nedeniyle oluşabilecek erişim sorunlarında standart hastane protokolleri ve klinik öncelikler uygulanmalıdır.",
+                legalSec4Bullet2Term: "Literatür Takibi",
+                legalSec4Bullet2Text: "Bu araç, Ocak 2026 tarihi itibarıyla geçerli olan tıbbi literatürle hazırlanmıştır. Güncel tıbbi kılavuzların takibi kullanıcının profesyonel sorumluluğundadır.",
+                legalConsentTitle: "Onaylar",
+                legalConsent1: "6698 sayılı KVKK uyarınca hazırlanan Aydınlatma Metni'ni okudum. Verilerimin bilimsel ve akademik amaçlarla, kimliğim gizli kalmak kaydıyla işlenmesini kabul ediyorum.",
+                legalConsent2: "Kullanım Koşullarını ve Sorumluluk Reddi beyanını okudum, anladım ve bu şartlar altında uygulamayı kullanmayı kabul ediyorum.",
+                legalStart: "HESAPLAYICIYI BAŞLAT"
             },
             en: {
                 title: "MİD-DEC | Shoulder Dystocia Risk Prediction System",
@@ -1748,7 +2168,64 @@
                 dlIosStep2: "Install it via AltStore or Apple Configurator.",
                 dlIosStep3: "Trust the developer under Settings > General > VPN & Device Management.",
                 dlNote: "Download links point to the latest release (v1.7.4). After installing, your administrator must approve your account before you can sign in.",
-                footerText: "© 2026 MİD-DEC. All rights reserved. Developed for healthcare professionals."
+                footerText: "© 2026 MİD-DEC. All rights reserved. Developed for healthcare professionals.",
+                legalTitle: "Application Credentials & Legal Notice",
+                legalKunyeBody: "MID-DEC Risk Calculator is legally protected before the Turkish Patent and Trademark Office under application number 2026/016909. All intellectual and proprietary rights in the application's software, algorithm, design and content are reserved.",
+                legalKunyeBody2: "This application was developed for the purpose of informing the user and collecting academic data. The results provided do not constitute a medical diagnosis, nor are they binding in any legal process. Data collected within the application may be fully anonymized and used in scientific research and academic publications in accordance with Law No. 6698 (KVKK).",
+                legalPrivacyTitle: "Privacy Notice & Terms of Use",
+                legalDisclaimerTitle: "Important Warning & Clinical Disclaimer",
+                legalDisclaimer1Term: "Diagnostic Status",
+                legalDisclaimer1Text: "This application is intended for clinical decision support. The analyses, charts or risk scores it presents are a machine-learning–based risk estimate. They do not by themselves constitute a medical diagnosis.",
+                legalDisclaimer2Term: "Clinical Limits",
+                legalDisclaimer2Text: "In line with scientific validation studies, the application is designed to work with singleton-pregnancy data at 34 weeks (34+0) and beyond. Inputs below this limit may produce erroneous results.",
+                legalDisclaimer3Term: "Legal Invalidity",
+                legalDisclaimer3Text: "The application's outputs cannot be used as legal evidence or an official report in judicial processes; the development team and affiliated institutions bear no legal responsibility in this regard.",
+                legalDisclaimer4Term: "Decision Basis",
+                legalDisclaimer4Text: "The risk estimate the application provides is an aid to the physician's and midwife's decision; in every case the clinical evaluation and the physician's and midwife's decision prevail.",
+                legalDataTitle: "Data Policy & Security Protocol",
+                legalDataIntro: "This protocol aims to ensure the full confidentiality of user and patient data in line with Law No. 6698 (KVKK) and international data-security standards (SSL/TLS, 2FA).",
+                legalSec21Title: "2.1. Data Security & Protection Measures",
+                legalSec21Intro: "Our application uses a multi-layered security architecture to protect sensitive health data from unauthorized access:",
+                legalSec21Bullet1Term: "End-to-End Encryption",
+                legalSec21Bullet1Text: "Data is encrypted with SSL/TLS protocols both while stored on the device and while transferred to the server.",
+                legalSec21Bullet2Term: "Regular Audit & Analysis",
+                legalSec21Bullet2Text: "Static and dynamic security tests are performed during software development to close potential vulnerabilities in advance.",
+                legalSec21Bullet3Term: "Data Backup",
+                legalSec21Bullet3Text: "Regular, secure backup procedures are applied on cloud-based systems to prevent possible data loss.",
+                legalSec22Title: "2.2. Transparency",
+                legalSec22Intro: "The following transparency is provided to the user in the application settings:",
+                legalSec22Bullet1Term: "Collection & Sharing Statement",
+                legalSec22Bullet1Text: "Unnecessary data such as the user's location, contacts or financial information is never collected. Only the clinical data required for analysis is processed in anonymized form.",
+                legalSec22Bullet2Term: "Right to Erasure",
+                legalSec22Bullet2Text: "Users have the right to close their accounts and request the permanent deletion of their data from our servers whenever they wish.",
+                legalSec23Title: "2.3. Legal Compliance & KVKK Notice",
+                legalSec23Intro: "As developers, we transparently inform our users about the purpose of data processing and retention periods:",
+                legalSec23Bullet1Term: "Clarification Text",
+                legalSec23Bullet1Text: "On entering the application, the user is presented with a clarification text stating that the data will be used for academic purposes.",
+                legalSec23Bullet2Term: "Privacy Policy",
+                legalSec23Bullet2Text: "Whom the data is shared with and the retention protocols are presented in detail in the in-app privacy policy.",
+                legalSec24Title: "2.4. User-Focused Security & Permission Management",
+                legalSec24Intro: "The application is built on the following principles to keep user security paramount:",
+                legalSec24Bullet1Term: "Least-Privilege Principle",
+                legalSec24Bullet1Text: "The application requests only the permissions essential to its function (e.g. internet access) and avoids unnecessary system permissions.",
+                legalSec24Bullet2Term: "Secure Installation",
+                legalSec24Bullet2Text: "To prevent the risk of data theft, it is recommended that the application be installed only from official stores (Google Play / App Store).",
+                legalSec3Title: "3. Academic Use & Intellectual Property Rights",
+                legalSec3Bullet1Term: "Research Authorization",
+                legalSec3Bullet1Text: "The anonymous data collected may be used in scientific research, doctoral theses, projects, academic publications, the development of the application and educational activities.",
+                legalSec3Bullet2Term: "Waiver of Claims",
+                legalSec3Bullet2Text: "The user irrevocably accepts the academic processing of the data. The user holds no intellectual property right or material/moral claim over academic publications, patents or commercial products derived from this data.",
+                legalSec3Bullet3Term: "Copyright",
+                legalSec3Bullet3Text: "The application's algorithm and methods are academic property; they may not be copied without permission or shared for commercial purposes.",
+                legalSec4Title: "4. Technical Conditions & Currency",
+                legalSec4Bullet1Term: "Technical Interruption",
+                legalSec4Bullet1Text: "Uninterrupted operation of the application is not guaranteed. In case of access problems due to technical faults, standard hospital protocols and clinical priorities must be applied.",
+                legalSec4Bullet2Term: "Literature Tracking",
+                legalSec4Bullet2Text: "This tool was prepared with the medical literature valid as of January 2026. Keeping up with current medical guidelines is the user's professional responsibility.",
+                legalConsentTitle: "Consents",
+                legalConsent1: "I have read the Clarification Text prepared in accordance with Law No. 6698 (KVKK). I consent to the processing of my data for scientific and academic purposes, provided that my identity remains confidential.",
+                legalConsent2: "I have read and understood the Terms of Use and the Disclaimer, and I agree to use the application under these terms.",
+                legalStart: "START CALCULATOR"
             }
         };
 
@@ -2353,6 +2830,20 @@
                     el.innerText = TRANSLATIONS[currentLang][key];
                 }
             });
+        }
+
+        // Check consent checkboxes state
+        function checkConsentState() {
+            const kvkkChecked = document.getElementById('consent-kvkk').checked;
+            const termsChecked = document.getElementById('consent-terms').checked;
+            document.getElementById('btn-legal-start').disabled = !(kvkkChecked && termsChecked);
+        }
+
+        // Accept legal consent and unlock calculator
+        function acceptLegalConsent() {
+            document.getElementById('legal-consent-container').style.display = 'none';
+            document.getElementById('calculator-interactive-container').style.display = 'block';
+            document.getElementById('calculator-interactive-container').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Launch app router (Sets search parameters to load Expo App)
