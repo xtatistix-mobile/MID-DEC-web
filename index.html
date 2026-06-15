@@ -2908,7 +2908,18 @@
             updateDOMTexts();
         });
     </script>
-<script src="./_expo/static/js/web/AppEntry-54a2bd41fb787ea340ee62a62c8b25b3.js" defer></script>
+<script>
+  // Boot the React Native Web app bundle ONLY in app-mode (?app=true / #app).
+  // On the static landing page, loading it mounts RNW over the page and breaks
+  // scrolling and clicks (the download modal stops opening), so we skip it.
+  (function () {
+    if (!document.documentElement.classList.contains('app-mode')) return;
+    var s = document.createElement('script');
+    s.src = './_expo/static/js/web/AppEntry-54a2bd41fb787ea340ee62a62c8b25b3.js';
+    s.defer = true;
+    document.body.appendChild(s);
+  })();
+</script>
 </body>
 
 </html>
