@@ -895,28 +895,7 @@
             color: #1E232C;
         }
 
-        .result-category-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 15px;
-            background: rgba(24, 192, 122, 0.12);
-            color: #18C07A;
-            transition: all 0.3s ease;
-        }
-
-        .result-advice {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #687684;
-            max-width: 280px;
-        }
-
-        /* Medical Disclaimer Footer Banner */
+        .gauge-fill-path { */
         .disclaimer-card {
             background: rgba(129, 183, 195, 0.05);
             border: 1px solid rgba(129, 183, 195, 0.15);
@@ -1803,8 +1782,6 @@
                                 </svg>
                                 <div class="gauge-text-val" id="gauge-score">0%</div>
                             </div>
-                            <div class="result-category-badge" id="result-badge" data-i18n="resultCatLow">Düşük Risk</div>
-                            <p class="result-advice" id="result-advice" data-i18n="resultAdviceLow">Klinik takip önerilir. Omuz distosisi riski standart popülasyon düzeyindedir.</p>
                             
                             <!-- Post-Birth Outcome Report Panel -->
                             <div id="post-birth-report" style="display: none; margin-top: 20px; border-top: 1px solid #e8ecf4; padding-top: 20px; text-align: left; font-size: 13px;">
@@ -1967,7 +1944,7 @@
                 lblMoroWeakness: "Moro Refleksinde Zayıflık",
                 lblPph: "PPH (Postpartum Hemoraji)",
                 lblPerianalTear: "Perianal Yırtık (3./4. derece)",
-                btnCalculate: "Risk Durumunu Hesapla",
+                btnCalculate: "Risk Skorunu Hesapla",
                 btnNext: "Sonraki Adım",
                 btnPrev: "Önceki Adım",
                 valRequired: "Zorunlu alan.",
@@ -2135,7 +2112,7 @@
                 lblMoroWeakness: "Moro Reflex Weakness",
                 lblPph: "PPH (Postpartum Hemorrhage)",
                 lblPerianalTear: "Perianal Tear (3rd/4th degree)",
-                btnCalculate: "Calculate Risk Status",
+                btnCalculate: "Calculate Risk Score",
                 btnNext: "Next Step",
                 btnPrev: "Previous Step",
                 valRequired: "Required field.",
@@ -2337,15 +2314,6 @@
             gaugeFill.style.strokeDashoffset = 125.66;
             gaugeFill.style.stroke = '#81B7C3';
             document.getElementById('gauge-score').innerText = '0%';
-            
-            const badge = document.getElementById('result-badge');
-            badge.innerText = '—';
-            badge.style.background = 'transparent';
-            badge.style.color = '#687684';
-
-            const advice = document.getElementById('result-advice');
-            advice.innerText = (currentLang === 'tr') ? 'Lütfen hesaplama yapmak için form verilerini doldurun.' : 'Please fill in the form data to calculate risk.';
-            advice.removeAttribute('data-i18n');
 
             const resTitle = document.getElementById('result-title');
             if (resTitle) {
@@ -2701,25 +2669,16 @@
                 const score = Math.max(5, Math.min(99, Math.round(p * 100)));
                 lastPreBirthScore = score;
                 
-                // Settle categories based on clinical thresholds
-                let category = 'Low';
+                // Settle color based on clinical thresholds
                 let color = '#18C07A';
-                let catKey = 'resultCatLow';
-                let advKey = 'resultAdviceLow';
                 
                 if (score >= 5 && score < 15) {
-                    category = 'Medium';
                     color = '#FFC107';
-                    catKey = 'resultCatMed';
-                    advKey = 'resultAdviceMed';
                 } else if (score >= 15) {
-                    category = 'High';
                     color = '#EA4335';
-                    catKey = 'resultCatHigh';
-                    advKey = 'resultAdviceHigh';
                 }
 
-                updateResultUI(score, color, catKey, advKey);
+                updateResultUI(score, color);
             } else {
                 // Post-Birth Outcome data collection (No score calculation)
                 // We show the pre-birth risk score if available.
@@ -2730,31 +2689,16 @@
                     gaugeFill.style.strokeDashoffset = 125.66;
                     gaugeFill.style.stroke = '#81B7C3';
                     document.getElementById('gauge-score').innerText = '—';
-                    
-                    const badge = document.getElementById('result-badge');
-                    badge.innerText = '—';
-                    badge.style.background = 'transparent';
-                    badge.style.color = '#687684';
-
-                    const advice = document.getElementById('result-advice');
-                    advice.innerText = (currentLang === 'tr') ? 'Lütfen önce Doğum Öncesi Risk hesaplaması yapın.' : 'Please calculate the Pre-Birth Risk first.';
-                    advice.removeAttribute('data-i18n');
                 } else {
                     let color = '#18C07A';
-                    let catKey = 'resultCatLow';
-                    let advKey = 'resultAdviceLow';
                     
                     if (score >= 5 && score < 15) {
                         color = '#FFC107';
-                        catKey = 'resultCatMed';
-                        advKey = 'resultAdviceMed';
                     } else if (score >= 15) {
                         color = '#EA4335';
-                        catKey = 'resultCatHigh';
-                        advKey = 'resultAdviceHigh';
                     }
                     
-                    updateResultUI(score, color, catKey, advKey);
+                    updateResultUI(score, color);
                 }
 
                 // Show post-birth outcome report panel
@@ -2805,24 +2749,12 @@
             }
         }
 
-        function updateResultUI(score, color, catKey, advKey) {
-            // Visualise gauge
+        function updateResultUI(score, color) {
             const gaugeFill = document.getElementById('gauge-fill');
             const dashOffset = 125.66 - (125.66 * score / 100);
             gaugeFill.style.strokeDashoffset = dashOffset;
             gaugeFill.style.stroke = color;
-            
             document.getElementById('gauge-score').innerText = `${score}%`;
-            
-            const badge = document.getElementById('result-badge');
-            badge.innerText = TRANSLATIONS[currentLang][catKey];
-            badge.setAttribute('data-i18n', catKey);
-            badge.style.background = color + '20'; // Opacity background
-            badge.style.color = color;
-
-            const advice = document.getElementById('result-advice');
-            advice.innerText = TRANSLATIONS[currentLang][advKey];
-            advice.setAttribute('data-i18n', advKey);
         }
 
         // Language toggle framework
