@@ -2539,7 +2539,9 @@
                         }
                     });
                 } else if (stepIndex === 1) {
-                    const required = ['bpd', 'hc', 'ac', 'fl'];
+                    const required = ['bpd', 'ac', 'fl'];
+                    const optional = ['hc'];
+                    
                     required.forEach(field => {
                         const el = document.getElementById(field);
                         const val = parseFloat(el.value);
@@ -2551,6 +2553,21 @@
                             err.innerText = TRANSLATIONS[currentLang].valRequired;
                             isValid = false;
                         } else {
+                            const spec = RANGES[field];
+                            if (val < spec.min || val > spec.max) {
+                                group.classList.add('error');
+                                err.innerText = `${TRANSLATIONS[currentLang].valRange} (${spec.min}-${spec.max})`;
+                                isValid = false;
+                            }
+                        }
+                    });
+                    
+                    optional.forEach(field => {
+                        const el = document.getElementById(field);
+                        if (el.value.trim()) {
+                            const val = parseFloat(el.value);
+                            const group = el.closest('.input-group');
+                            const err = document.getElementById(`err-${field}`);
                             const spec = RANGES[field];
                             if (val < spec.min || val > spec.max) {
                                 group.classList.add('error');
@@ -2601,28 +2618,28 @@
                 const totalGestDays = gestWeeks * 7 + gestDays;
                 
                 // Weight gain
-                const weightGain = weight - prePregWeight;
+                const weightGain = Math.round((weight - prePregWeight) * 10) / 10;
                 
                 // BMI
                 const hMeter = height / 100;
-                const bmi = (hMeter > 0) ? (prePregWeight / (hMeter * hMeter)) : 0;
+                const bmi = (hMeter > 0) ? (Math.round((prePregWeight / (hMeter * hMeter)) * 10) / 10) : 0;
                 
                 // Parity
                 const parity = parseInt(formData.parity) || 0;
                 
-                // AC-BPD in cm, AC/BPD Ratio
+                // AC-BPD difference (MM, to match the sheet μ/σ) + AC/BPD ratio (3 dp)
                 const acMm = parseFloat(formData.ac) || 0;
                 const bpdMm = parseFloat(formData.bpd) || 0;
-                const acBpdDiff = (acMm > 0 && bpdMm > 0) ? ((acMm - bpdMm) / 10) : 0;
-                const acBpdR = (bpdMm > 0) ? (acMm / bpdMm) : 0;
-                
-                // TFA-Warsof in kg
-                let efwKg = 0;
+                const acBpdDiffMm = (acMm > 0 && bpdMm > 0) ? (acMm - bpdMm) : 0;
+                const acBpdR = (bpdMm > 0) ? (Math.round((acMm / bpdMm) * 1000) / 1000) : 0;
+
+                // TFA-Warsof in GRAMS (rounded to whole grams, to match the sheet μ/σ)
+                let efwG = 0;
                 const bpdCm = bpdMm / 10;
                 const acCm = acMm / 10;
                 if (bpdCm > 0 && acCm > 0) {
                     const kg = Math.pow(10, -1.599 + 0.144 * bpdCm + 0.032 * acCm - 0.000111 * bpdCm * bpdCm * acCm);
-                    efwKg = kg;
+                    efwG = Math.round(kg * 1000);
                 }
                 
                 // Categorical values
@@ -2635,19 +2652,39 @@
                 const vacuumVal = formData.vacuum === 'Yes' ? 1 : 0;
                 const fetalSexMaleVal = formData.fetalSex === 'Male' ? 1 : 0;
                 
-                // Calculate z (Log-odds)
+                // Population μ/σ (statistician's training set, tmp/MID-DEC.xlsx).
+                // Coefficients were fit on STANDARDIZED predictors, so each
+                // continuous value must be converted with (x − μ)/σ first; binary
+                // predictors stay 0/1. Note: acBpdDiff μ/σ are in MM and efw μ/σ
+                // are in GRAMS (raw units used in the sheet).
+                const STDZ = {
+                    age:        { mu: 27.26,   sd: 5.33 },
+                    gestDays:   { mu: 273.65,  sd: 10.03 },
+                    height:     { mu: 162.51,  sd: 5.94 },
+                    weight:     { mu: 77.53,   sd: 12.89 },
+                    weightGain: { mu: 11.43,   sd: 4.97 },
+                    prePreg:    { mu: 66.10,   sd: 12.71 },
+                    bmi:        { mu: 25.03,   sd: 4.62 },
+                    parity:     { mu: 0.96,    sd: 1.08 },
+                    acBpdDiff:  { mu: 243.84,  sd: 14.02 },
+                    acBpdR:     { mu: 3.65,    sd: 0.15 },
+                    efw:        { mu: 3231.23, sd: 439.61 }
+                };
+                const zStd = (key, x) => { const s = STDZ[key]; return s && s.sd ? (Number(x) - s.mu) / s.sd : 0; };
+
+                // Calculate z (Log-odds) on standardized continuous predictors
                 const z = -0.861
-                    + 0.362 * age
-                    + 0.193 * totalGestDays
-                    - 0.304 * height
-                    + 0.111 * weight
-                    + 0.111 * weightGain
-                    + 0.069 * prePregWeight
-                    + 0.188 * bmi
-                    - 0.366 * parity
-                    - 0.205 * acBpdDiff
-                    + 0.071 * acBpdR
-                    + 1.392 * efwKg
+                    + 0.362 * zStd('age', age)
+                    + 0.193 * zStd('gestDays', totalGestDays)
+                    - 0.304 * zStd('height', height)
+                    + 0.111 * zStd('weight', weight)
+                    + 0.111 * zStd('weightGain', weightGain)
+                    + 0.069 * zStd('prePreg', prePregWeight)
+                    + 0.188 * zStd('bmi', bmi)
+                    - 0.366 * zStd('parity', parity)
+                    - 0.205 * zStd('acBpdDiff', acBpdDiffMm)
+                    + 0.071 * zStd('acBpdR', acBpdR)
+                    + 1.392 * zStd('efw', efwG)
                     + 0.218 * smokingVal
                     + 0.490 * historyVal
                     + 0.121 * gestDiabetesVal
