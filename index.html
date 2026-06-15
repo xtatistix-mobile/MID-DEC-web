@@ -1175,6 +1175,15 @@
             margin-bottom: 14px;
         }
 
+        .platform-steps-intro {
+            text-align: left;
+            width: 100%;
+            font-size: 12px;
+            color: #687684;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+
         .platform-steps {
             list-style: none;
             text-align: left;
@@ -1877,10 +1886,12 @@
                     <div class="platform-name" data-i18n="dlIosName">iPhone · iOS</div>
                     <div class="platform-meta" data-i18n="dlIosMeta">IPA · Sürüm 1.7.4</div>
                     <a class="btn-primary-gradient" id="dl-ios-btn" href="https://github.com/xtatistix-mobile/MID-DEC-web/releases/download/v1.7.4/app-release.ipa" data-i18n="dlIosBtn">IPA İndir</a>
+                    <p class="platform-steps-intro" data-i18n="dlIosIntro">Eğer etkin değilse Geliştirici Modu'nu açmanız gerekir. Bunu şu şekilde yapabilirsiniz:</p>
                     <ul class="platform-steps">
-                        <li data-i18n="dlIosStep1">IPA dosyasını indirin.</li>
-                        <li data-i18n="dlIosStep2">AltStore veya Apple Configurator ile cihazınıza yükleyin.</li>
-                        <li data-i18n="dlIosStep3">Ayarlar &gt; Genel &gt; VPN ve Cihaz Yönetimi'nden geliştiriciye güvenin.</li>
+                        <li data-i18n="dlIosStep1">IPA'yı cihazınıza yükleyin ve uygulama simgesine dokunun.</li>
+                        <li data-i18n="dlIosStep2">Sistem uyarısı Geliştirici Modu'nu etkinleştirmenizi isteyecek; Tamam'a basın.</li>
+                        <li data-i18n="dlIosStep3">Ardından Ayarlar &gt; Gizlilik ve Güvenlik &gt; Geliştirici Modu'na gidip anahtarı açın. İstendiğinde Yeniden Başlat'a basın.</li>
+                        <li data-i18n="dlIosStep4">Cihaz yeniden başladıktan sonra çıkan sistem uyarısında Aç'a basın ve şifrenizi girin.</li>
                     </ul>
                 </div>
             </div>
@@ -1998,9 +2009,11 @@
                 dlIosName: "iPhone · iOS",
                 dlIosMeta: "IPA · Sürüm 1.7.4",
                 dlIosBtn: "IPA İndir",
-                dlIosStep1: "IPA dosyasını indirin.",
-                dlIosStep2: "AltStore veya Apple Configurator ile cihazınıza yükleyin.",
-                dlIosStep3: "Ayarlar > Genel > VPN ve Cihaz Yönetimi'nden geliştiriciye güvenin.",
+                dlIosIntro: "Eğer etkin değilse Geliştirici Modu'nu açmanız gerekir. Bunu şu şekilde yapabilirsiniz:",
+                dlIosStep1: "IPA'yı cihazınıza yükleyin ve uygulama simgesine dokunun.",
+                dlIosStep2: "Sistem uyarısı Geliştirici Modu'nu etkinleştirmenizi isteyecek; Tamam'a basın.",
+                dlIosStep3: "Ardından Ayarlar > Gizlilik ve Güvenlik > Geliştirici Modu'na gidip anahtarı açın. İstendiğinde Yeniden Başlat'a basın.",
+                dlIosStep4: "Cihaz yeniden başladıktan sonra çıkan sistem uyarısında Aç'a basın ve şifrenizi girin.",
                 dlNote: "İndirme bağlantıları en güncel sürüme (v1.7.4) yönlendirir. Kurulum sonrası giriş için yöneticinizin hesabınızı onaylaması gerekir.",
                 footerText: "© 2026 MID-DEC. Tüm hakları saklıdır. Sağlık profesyonelleri için geliştirilmiştir.",
                 legalTitle: "Uygulama Künyesi ve Yasal Bilgilendirme",
@@ -2164,9 +2177,11 @@
                 dlIosName: "iPhone · iOS",
                 dlIosMeta: "IPA · Version 1.7.4",
                 dlIosBtn: "Download IPA",
-                dlIosStep1: "Download the IPA file.",
-                dlIosStep2: "Install it via AltStore or Apple Configurator.",
-                dlIosStep3: "Trust the developer under Settings > General > VPN & Device Management.",
+                dlIosIntro: "You must turn on Developer Mode if it is not already enabled. You can do so by:",
+                dlIosStep1: "Installing the build on your device and tapping the app icon.",
+                dlIosStep2: "A system alert will prompt you to enable Developer Mode. Press OK.",
+                dlIosStep3: "Navigate to Settings > Privacy & Security > Developer Mode and switch on the toggle. Press Restart when prompted.",
+                dlIosStep4: "After the device restarts, press Turn On in the system alert that appears and enter your passcode.",
                 dlNote: "Download links point to the latest release (v1.7.4). After installing, your administrator must approve your account before you can sign in.",
                 footerText: "© 2026 MID-DEC. All rights reserved. Developed for healthcare professionals.",
                 legalTitle: "Application Credentials & Legal Notice",
