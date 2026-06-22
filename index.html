@@ -2574,7 +2574,8 @@
                 }
             } else { // post_birth
                 if (stepIndex === 1) {
-                    const required = ['birthWeight', 'apgar1', 'apgar5'];
+                    const required = ['birthWeight'];
+                    const optional = ['apgar1', 'apgar5'];
                     required.forEach(field => {
                         const el = document.getElementById(field);
                         const val = parseFloat(el.value);
@@ -2586,6 +2587,21 @@
                             err.innerText = TRANSLATIONS[currentLang].valRequired;
                             isValid = false;
                         } else {
+                            const spec = RANGES[field];
+                            if (val < spec.min || val > spec.max) {
+                                group.classList.add('error');
+                                err.innerText = `${TRANSLATIONS[currentLang].valRange} (${spec.min}-${spec.max})`;
+                                isValid = false;
+                            }
+                        }
+                    });
+
+                    optional.forEach(field => {
+                        const el = document.getElementById(field);
+                        if (el && el.value.trim()) {
+                            const val = parseFloat(el.value);
+                            const group = el.closest('.input-group');
+                            const err = document.getElementById(`err-${field}`);
                             const spec = RANGES[field];
                             if (val < spec.min || val > spec.max) {
                                 group.classList.add('error');
